@@ -1,16 +1,22 @@
-#include <iostream>
-
 #ifndef SPPOWER_H
 #define SPPOWER_H
 
-class  PowerBudges {
-	enum Powers;
-	Powers specialPower;
-	int coinsOwn;
-	int regionsOwn;
+#include <string>
+
+class PowerBudges {
 public:
 	PowerBudges();
-	PowerBudges(Powers, int, int);
+	~PowerBudges();
+
+	enum Powers {
+		alchemist, berserk, bivouacking, commando,
+		diplomat, dragonMaster, flying, forest,
+		fortified, heroic, hill, merchant, mounted,
+		pillaging, seafaring, spirit, stout, swamp,
+		underworld, wealthy
+	};
+	void setPowerBudges(Powers, int, int);
+
 	int Alchemist(int, int);
 	void Berserk();
 	void Bivouacking();
@@ -31,6 +37,10 @@ public:
 	void Swamp();
 	void Underworld();
 	void Wealthy();
+private:
+	Powers specialPower;
+	int coinsOwn;
+	int regionsOwn;
 };
 
 #endif

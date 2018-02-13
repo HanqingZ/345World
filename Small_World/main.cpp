@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void main() {
+int main() {
 
 	//import the map here and print in
 	
@@ -23,4 +23,5 @@ void main() {
 	GameDrive game;
 	game.start();
 
+	return 0;
 }

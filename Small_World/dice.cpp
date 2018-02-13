@@ -1,14 +1,16 @@
 #include "Dice.h"
 #include <iostream>
 
-using namespace std;
+//using namespace std;
 
 Dice::Dice() {
 
 }
 
+Dice::~Dice() {
+
+}
+
 int Dice::rollingResult(bool turnStatus) {
-	if(turnStatus){
-		random
-		)
+	return 0;
 }

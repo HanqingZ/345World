@@ -2,24 +2,29 @@
 
 #include <iostream>
 
-enum Powers {
+/*enum Powers {
 	alchemist, berserk, bivouacking, commando, 
 	diplomat, dragonMaster, flying, forest,
 	fortified, heroic, hill, merchant, mounted,
 	pillaging, seafaring, spirit, stout, swamp, 
 	underworld, wealthy
 };
+*/
 
 PowerBudges::PowerBudges() {
 
 }
 
-PowerBudges::PowerBudges(Powers power, int coins, int regions) {
+PowerBudges::~PowerBudges() {
+
+}
+
+void PowerBudges::setPowerBudges(Powers power, int coins, int regions) {
 	this->coinsOwn = coins;
 	this->regionsOwn = regions;
 
 	Powers specialPower = power;
-	switch (power) {
+/*	switch (power) {
 	case alchemist: PowerBudges::Alchemist(coinsOwn, regionsOwn); break;
 	case berserk: Berserk(); break;
 	case bivouacking: Bivouacking(); break;
@@ -43,10 +48,11 @@ PowerBudges::PowerBudges(Powers power, int coins, int regions) {
 	default:
 		break;
 	}
+	*/
 }
 
 
 
 int PowerBudges::Alchemist(int coins, int regions) {
-	return 
+	return 0;
 }
