@@ -3,6 +3,8 @@
 
 #include "Dice.h"
 #include "Races.h"
+#include "PowerBudges.h"
+#include "MapLoader.h"
 
 
 //using namespace std;
@@ -12,14 +14,16 @@ private:
 	int numOfPlayer;
 	int id;
 	string playerName;
+	string RaceOwned;
+	int numOfRaceOwn;
 	int coinOwn;
 public:
 	Player();
 	Player(int, string);
 	~Player();
 
-	void pick_race();
-	void conquers();
+	int pick_race(Races, PowerBudges);
+	bool conquers(int);
 	int score(int);
 };
 

@@ -28,7 +28,9 @@ void GameDrive::start() {
 		cin >> numOfPlayer;
 	} while (numOfPlayer > 5 || numOfPlayer < 2);
 
-	//Player player = new Player*[numOfPlayer];
+	for(int j = 0; j < numOfPlayer; j++){
+		Player player(j+1, "user");
+	}
 
 	cout << "Now is Turn #" << numOfTurn <<endl;
 	//print the combo of race and special power

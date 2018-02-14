@@ -15,34 +15,32 @@ private:
 	int raceNumber;
 
 public:
-	string* raceType[14];
-		/*
-		= {
+	const string raceType[14] = {
 		"AMAZON", "DWARVE", "ELVE", "GHOUL", "GIANT", "HALFLING",
 		"HUMAN", "ORCS", "RATMAN", "SKELETON", "SORCERER", "TRITON",
 		"TROLL", "WIZARD" };
-		*/
+		
 	Races();
 //	~Races();
-	void findRaceAbility(int);
+	void useRaceAbility(int, bool);
 	string getRaceType(int);
 //	void setRaceType(string[]);
 	void setRaceBanner(string);
 
-	void Amazon();
-	void Dwarve();
-	void Elve();
-	void Ghoul();
-	void Giant();
-	void Halfling();
-	void Human();
-	void Orcs();
-	void Ratman();
-	void Skeleton();
-	void Sorcerer();
-	void Triton();
-	void Troll();
-	void Wizard();
+	int Amazon();
+	int Dwarve(bool);
+	int Elve();
+	int Ghoul();
+	int Giant();
+	int Halfling();
+	int Human(bool);
+	int Orcs();
+	int Ratman();
+	int Skeleton();
+	int Sorcerer();
+	int Triton();
+	int Troll();
+	int Wizard(bool);
 };
 
 #endif

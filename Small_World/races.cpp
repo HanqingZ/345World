@@ -12,19 +12,62 @@ using namespace std;
 */
 
 Races::Races() {
-	string raceType[14] = {
+	/*string raceType[14] = {
 		"AMAZON", "DWARVE", "ELVE", "GHOUL", "GIANT", "HALFLING",
 		"HUMAN", "ORCS", "RATMAN", "SKELETON", "SORCERER", "TRITON",
-		"TROLL", "WIZARD" };
+		"TROLL", "WIZARD" };*/
 	int raceNumber = 0;
-	string raceBanner;
+	string raceBanner = "";
 	string races;
 }
 
 
-void Races::findRaceAbility(int num) {
+void Races::useRaceAbility(int num, bool active) {
 
-	switch (num)
+	if (num == 0 && active == true) {
+		Races::Amazon();
+	}
+	else if (num == 1) {
+		Races::Dwarve(active);
+	}
+	else if (num == 2 && active == true) {
+		Races::Elve();
+	}
+	else if (num == 3 && active == true) {
+		Races::Ghoul();
+	}
+	else if (num == 4 && active == true) {
+		Races::Giant();
+	}
+	else if (num == 5 && active == true) {
+		Races::Halfling();
+	}
+	else if (num == 6) {
+		Races::Human(active);
+	}
+	else if (num == 7 && active == true) {
+		Races::Orcs();
+	}
+	else if (num == 8 && active == true) {
+		Races::Ratman();
+	}
+	else if (num == 9 && active == true) {
+		Races::Skeleton();
+	}
+	else if (num == 10 && active == true) {
+		Races::Sorcerer();
+	}
+	else if (num == 11 && active == true) {
+		Races::Triton();
+	}
+	else if (num == 12 && active == true) {
+		Races::Troll();
+	}
+	else if (num == 13) {
+		Races::Wizard(active);
+	}
+
+/*	switch (num)
 	{
 	case 0: Races::Amazon(); break;
 	case 1: Races::Dwarve(); break;
@@ -43,6 +86,7 @@ void Races::findRaceAbility(int num) {
 	default:
 		break;
 	}
+*/
 }
 
 //void Races::setRaceBanner(string rb) {
@@ -51,65 +95,80 @@ void Races::findRaceAbility(int num) {
 
 string Races::getRaceType(int raceNumber) {
 	int races = raceNumber;
-	return Races::raceType[races];
+	return Races::raceType[raceNumber];
 }
 
 void setRaceBanner(string racebanner) {
 //	this->raceBanner = racebanner;
 }
 
-void Races::Amazon() {
+int Races::Amazon() {
 
 }
 
-void Races::Dwarve() {
+int Races::Dwarve(bool a) {
+	if (a == true) {
+
+	}
+	else {
+
+	}
+}
+
+int Races::Elve() {
 
 }
 
-void Races::Elve() {
+int Races::Ghoul() {
 
 }
 
-void Races::Ghoul() {
+int Races::Giant() {
 
 }
 
-void Races::Giant() {
+int Races::Halfling() {
 
 }
 
-void Races::Halfling() {
+int Races::Human(bool a) {
+	if (a == true) {
+
+	}
+	else {
+
+	}
+}
+
+int Races::Orcs() {
 
 }
 
-void Races::Human() {
+int Races::Ratman() {
 
 }
 
-void Races::Orcs() {
+int Races::Skeleton() {
 
 }
 
-void Races::Ratman() {
+int Races::Sorcerer() {
 
 }
 
-void Races::Skeleton() {
+int Races::Triton() {
 
 }
 
-void Races::Sorcerer() {
+int Races::Troll() {
 
 }
 
-void Races::Triton() {
+int Races::Wizard(bool a) {
+	if (a == true) {
 
-}
+	}
+	else {
 
-void Races::Troll() {
-
-}
-
-void Races::Wizard() {
-
+	}
 }
