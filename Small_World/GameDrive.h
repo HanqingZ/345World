@@ -3,32 +3,38 @@
 
 #include "Player.h"
 #include "MapLoader.h"
+#include "Map.h"
 
 #include <array>
 #include <string>
 using namespace std;
 
 class GameDrive {
-private:
+protected:
+	Player** player;
 	int numOfPlayer;
 	//number of turn is from 0 to 9
 	int numOfTurn;
 	int numOfCombo;
-	string combo[6];
-/*	static const string race_type[14] = {
-		"AMAZON", "DWARVE", "ELVE", "GHOUL", "GIANT", "HALFLING",
-		"HUMAN", "ORCS", "RATMAN", "SKELETON", "SORCERER", "TRITON",
-		"TROLL", "WIZARD" };
-*/
+	bool playerNumCheck;
+	Races r;
+	PowerBudges pb;
+	Map testmap;
+	MapLoader testMap;
+
 public:
 	GameDrive();
-	//load map and number of player
-	//GameDrive(map, int);
 	~GameDrive();
+	void setUp();
 	void start();
 
+	void chooseMap(int);
 	void charaCombo();
-	void setPersonalCombo(int);
+//	void setPersonalCombo(int);
+	string shufflePickRace(int);
+	string shufflePickPower(int);
+	void setRaceType(Races);
+	void setPowerType(PowerBudges);
 };
 
 #endif

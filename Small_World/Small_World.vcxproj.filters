@@ -36,6 +36,12 @@
     <ClCompile Include="powerBudges.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="region.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dice.h">
@@ -56,5 +62,19 @@
     <ClInclude Include="PowerBudges.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Region.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="testing.map">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Map2.map">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

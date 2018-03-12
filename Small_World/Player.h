@@ -6,25 +6,35 @@
 #include "PowerBudges.h"
 #include "MapLoader.h"
 
+#include <vector>
+#include <string>
 
-//using namespace std;
+using namespace std;
 
 class Player {
-private:
+
+protected:
 	int numOfPlayer;
 	int id;
-	string playerName;
-	string RaceOwned;
-	int numOfRaceOwn;
+	Races raceOwned;
+	PowerBudges powerOwned;
+	int numOfTokenOwn;
 	int coinOwn;
+	int pickRegion;
+	int tokenPlaced;
+
 public:
+
 	Player();
-	Player(int, string);
+	Player(int);
 	~Player();
 
-	int pick_race(Races, PowerBudges);
-	bool conquers(int);
-	int score(int);
+	void pick_race(Races, PowerBudges);
+	void conquers();
+	void score(int);
+	Races getRaces();
+	PowerBudges getPower();
+
 };
 
 #endif

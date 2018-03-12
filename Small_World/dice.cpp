@@ -1,11 +1,13 @@
 #include "Dice.h"
+#include <ctime>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
 //using namespace std;
 
 Dice::Dice() {
-
+//	rolldice = 0;
 }
 
 Dice::~Dice() {
@@ -16,9 +18,10 @@ Dice::~Dice() {
 int Dice::rollingResult(bool turnStatus) {
 	vector<int> rolls;
 
+	srand((unsigned)time(0));
 	rolldice = rand() % 6;
 
-	if (rolldice > 4 && rolldice == 0) {
+	if (rolldice >= 4 || rolldice == 0) {
 		rolls.push_back(0);
 		cout << "Rolling result is 0" << endl;
 		return 0;

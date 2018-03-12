@@ -113,18 +113,26 @@
     <ClCompile Include="gameDrive.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="dice.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="mapLoader.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="races.cpp" />
     <ClCompile Include="powerBudges.cpp" />
+    <ClCompile Include="region.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dice.h" />
     <ClInclude Include="GameDrive.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Races.h" />
     <ClInclude Include="PowerBudges.h" />
+    <ClInclude Include="Region.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Map2.map" />
+    <None Include="testing.map" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

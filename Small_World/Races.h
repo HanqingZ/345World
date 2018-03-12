@@ -2,45 +2,106 @@
 #define _RACES_H
 
 #include <iostream>
-#include <string>
-#include <array>
+#include <string.h>
+
+using namespace std;
 
 class Races {
 	
-private: 
-	int numOfRace;
+protected: 
+	int numOfToken;
 	int numOfVictoryCoin;
-	string raceBanner;
-	bool active = true;
-	int raceNumber;
+	string raceName;
+	bool active;
+	string raceDescription;
 
-public:
-	const string raceType[14] = {
-		"AMAZON", "DWARVE", "ELVE", "GHOUL", "GIANT", "HALFLING",
-		"HUMAN", "ORCS", "RATMAN", "SKELETON", "SORCERER", "TRITON",
-		"TROLL", "WIZARD" };
-		
+public:		
 	Races();
-//	~Races();
-	void useRaceAbility(int, bool);
-	string getRaceType(int);
-//	void setRaceType(string[]);
-	void setRaceBanner(string);
+//	Races(int, int, string);
 
-	int Amazon();
-	int Dwarve(bool);
-	int Elve();
-	int Ghoul();
-	int Giant();
-	int Halfling();
-	int Human(bool);
-	int Orcs();
-	int Ratman();
-	int Skeleton();
-	int Sorcerer();
-	int Triton();
-	int Troll();
-	int Wizard(bool);
+	string getRaceName();
+	void setRaceName(string);
+	int getVictoryCoin();
+	void setVictoryCoins(int);
+	int getTokenNumber();
+	void setTokenNumber(int);
+	bool getActiveCondition();
+	void setActiveCondition(bool);
+	string getRaceDescription();
+	void setRaceDescription(string);
+	
+};
+
+//===================================================================
+
+class Amazon : public Races {
+public:
+	Amazon();
+};
+
+class Dwarve : public Races {
+public:
+	Dwarve();
+};
+	
+class Elve : public Races{
+public:
+	Elve();
+};
+
+class Ghoul : public Races{
+public:
+	Ghoul();
+};
+
+class Giant : public Races {
+public:
+	Giant();
+};
+
+class Halfling : public Races {
+public:
+	Halfling();
+};
+
+class Human : public Races {
+public:
+	Human();
+};
+
+class Orcs : public Races {
+public:
+	Orcs();
+};
+
+class Ratman : public Races {
+public:
+	Ratman();
+};
+
+class Skeleton : public Races {
+public:
+	Skeleton();
+};
+
+class Sorcerer : public Races {
+public:
+	Sorcerer();
+};
+
+class Triton : public Races {
+public:
+	Triton();
+};
+
+class Troll : public Races {
+public:
+	Troll();
+};
+
+class Wizard : public Races {
+public:
+	Wizard();
 };
 
 #endif

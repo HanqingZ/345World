@@ -2,50 +2,69 @@
 #include <string>
 
 #include "Player.h"
-//#include "Races.h"
-//#include "PowerBudges.h"
+#include "Races.h"
+#include "PowerBudges.h"
 //#include "MapLoader.h"
+
 
 using namespace std;
 
 Player::Player() {
-
+	id = 0;
+	coinOwn = 5;
+	numOfTokenOwn = 0;
 }
 
-Player::Player(int userId, string userName) {
-	this->playerName = userName;
+Player::Player(int userId) {
 	this->id = userId;
+	this->coinOwn = 5;
+	this->numOfTokenOwn = 0;
 }
 
 Player::~Player() {
 
 }
 
-int Player::pick_race(Races rs, PowerBudges pb) {
-	Races race = rs;
-	PowerBudges specialPower= pb;
-	return numOfRaceOwn;
+void Player::pick_race(Races rs, PowerBudges pb) {
+	this->raceOwned = rs;
+	this->powerOwned = pb;
+
+	numOfTokenOwn = raceOwned.getTokenNumber() + powerOwned.getTokenNumber();
+
+	cout << "You pick the race " << raceOwned.getRaceName()
+		<< " with special power " << powerOwned.getPowerName()
+		<< " owns " << numOfTokenOwn << " coins at be." << endl;
 }
 
-//input 
-bool Player::conquers(int numOfRaceOwn) {
-	int c;
+
+void Player::conquers() {
+	
+	numOfTokenOwn = raceOwned.getTokenNumber() + powerOwned.getTokenNumber();
+
 	cout << "Which place you want to pick?" << endl;
-	cin >> c;
+	cin >> pickRegion;
 
-	if (c >= numOfRaceOwn) {
+//================================
+
+	int c = 10;
+	if (c >= numOfTokenOwn) {
 		cout << "You owns this region." <<endl;
-		return true;
 	}
-	else if (c < numOfRaceOwn) {
+	else if (c < numOfTokenOwn) {
 		cout << "You can't own this region." << endl;
-		return false;
 	}
-	return false;
 }
 
-int Player::score(int coinPast) {
-
-	return coinOwn;
+void Player::score(int coinPast) {
+	
 }
 
+
+
+Races Player::getRaces() {
+	return raceOwned;
+}
+
+PowerBudges Player::getPower() {
+	return powerOwned;
+}
