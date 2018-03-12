@@ -1,32 +1,107 @@
+#ifndef _RACES_H
+#define _RACES_H
 
-#include <string>
+#include <iostream>
+#include <string.h>
+
+using namespace std;
 
 class Races {
-	enum RaceType;
-private:
-	int numOfRace;
+	
+protected: 
+	int numOfToken;
 	int numOfVictoryCoin;
-	string raceBanner;
+	string raceName;
 	bool active;
-public:
-	Races();
-	string setRace(RaceType);
-	void setNumberOfRace();
-	void setNumberOfVictoryCoin();
-	void setRaceBanner(string raceBanner);
+	string raceDescription;
 
-	void Amazon();
-	void Dwarve();
-	void Elve();
-	void Ghoul();
-	void Giant();
-	void Halfling();
-	void Human();
-	void Orcs();
-	void Ratman();
-	void Skeleton();
-	void Sorcerer();
-	void Triton();
-	void Troll();
-	void Wizard();
+public:		
+	Races();
+//	Races(int, int, string);
+
+	string getRaceName();
+	void setRaceName(string);
+	int getVictoryCoin();
+	void setVictoryCoins(int);
+	int getTokenNumber();
+	void setTokenNumber(int);
+	bool getActiveCondition();
+	void setActiveCondition(bool);
+	string getRaceDescription();
+	void setRaceDescription(string);
+	
 };
+
+//===================================================================
+
+class Amazon : public Races {
+public:
+	Amazon();
+};
+
+class Dwarve : public Races {
+public:
+	Dwarve();
+};
+	
+class Elve : public Races{
+public:
+	Elve();
+};
+
+class Ghoul : public Races{
+public:
+	Ghoul();
+};
+
+class Giant : public Races {
+public:
+	Giant();
+};
+
+class Halfling : public Races {
+public:
+	Halfling();
+};
+
+class Human : public Races {
+public:
+	Human();
+};
+
+class Orcs : public Races {
+public:
+	Orcs();
+};
+
+class Ratman : public Races {
+public:
+	Ratman();
+};
+
+class Skeleton : public Races {
+public:
+	Skeleton();
+};
+
+class Sorcerer : public Races {
+public:
+	Sorcerer();
+};
+
+class Triton : public Races {
+public:
+	Triton();
+};
+
+class Troll : public Races {
+public:
+	Troll();
+};
+
+class Wizard : public Races {
+public:
+	Wizard();
+};
+
+#endif

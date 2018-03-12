@@ -1,10 +1,19 @@
+#ifndef DICE_H
+#define DICE_H
+
 #include <iostream>
 
-class Dice : static {
-	int rolldice;
-	
+using namespace std;
 
+class Dice {
+private:
+	int rolldice;
+	int placedRace;
 public:
 	Dice();
-	int rollingResult(bool turnStatus);
-}
+	~Dice();
+	int rollingResult(bool);
+//	int getRollintResult(int);
+};
+
+#endif

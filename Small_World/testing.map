@@ -1,0 +1,18 @@
+[Map]
+Name=map2
+number of player=2
+width=4
+length=4
+
+[Region]
+0,North Sea,0,0,Lake
+1,Ice Mountain,2,0,Mountain
+2,Lost Country,4,1,Farmland
+3,Abandon Swamp,3,4,Swamp;
+
+
+[Edges]
+0->1,2;
+1->0,2;
+2->0,3;
+3->2;

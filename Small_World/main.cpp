@@ -2,11 +2,13 @@
 #include <string>
 
 #include "GameDrive.h"
+#include "Map.h"
 
 using namespace std;
 
-void main() {
+int main() {
 
+	int c;
 	//import the map here and print in
 	
 /*		cout << "How many player do you have?" << endl;
@@ -21,7 +23,10 @@ void main() {
 		}
 */
 	GameDrive game;
+	game.setUp();
 	game.start();
+	
+	cin >> c;
 
+	return 0;
 }
-

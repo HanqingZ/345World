@@ -3,23 +3,38 @@
 
 #include "Dice.h"
 #include "Races.h"
+#include "PowerBudges.h"
+#include "MapLoader.h"
+
+#include <vector>
+#include <string>
 
 using namespace std;
 
-class Player :{
-private:
-	bool active == false;
-public:
+class Player {
+
+protected:
 	int numOfPlayer;
 	int id;
-	string playerName;
+	Races raceOwned;
+	PowerBudges powerOwned;
+	int numOfTokenOwn;
 	int coinOwn;
+	int pickRegion;
+	int tokenPlaced;
+
+public:
 
 	Player();
-	Player(int, string);
+	Player(int);
+	~Player();
 
-	void pick_race();
+	void pick_race(Races, PowerBudges);
 	void conquers();
-	int score(int);
-}
+	void score(int);
+	Races getRaces();
+	PowerBudges getPower();
+
+};
+
 #endif
