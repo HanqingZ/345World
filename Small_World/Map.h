@@ -1,7 +1,8 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "MapLoader.h"
+//#include "MapLoader.h"
+//#include "Region.h"
 
 #include <iostream>
 #include <string>
@@ -12,34 +13,25 @@
 
 using namespace std;
 
-class Nodes {
-private:
-	//int key;
-	//int size;
-public:
-	Nodes();
-	~Nodes();
-	void addLink(int);
-	void printLink();
-
-	list<int> lists;
+struct RegionNode {
+	int depar;
 };
 
 //create the realation between each region
 class Map {
+protected:
+	list<int>::iterator i;
 public:
 	Map();
 	~Map();
 
-	void addEdges(Nodes);
+	//void addEdges(int);
+	void addMapEdges(list<int>);
+	list<int> findEdges(int);
 	void printEdges(int);
 	
-	vector<Nodes> mps;
-	Nodes list2;
-
-private:
-	//vector<Region> regions; //nodes
-	//int nodesCode; // index or departure of the edges 
+	vector<list<int>> maps;
+	//list<int> lists;
 	
 };
 

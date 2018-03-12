@@ -3,45 +3,39 @@
 
 #include <iostream>
 #include <string>
+//#include "Region.h"
+//#include "Player.h"
 
 using namespace std;
 
 class PowerBudges {
 
 protected:
+	int powerId;
 	int numOfToken;
 	int numOfVictoryCoin;
 	string powerName;
 	bool active;
-	string powerDescription;
+	int immune;		//some races can set regions to be immune
 
 public:
 	PowerBudges();
-//	~PowerBudges();
+	~PowerBudges();
 
-	/*
-	virtual void setPowerName();
-	virtual void setPowerDescription();
-	virtual void setTokenNumber();
-	virtual void setVictoryCoin();
-
-	virtual string getPowerName() { return powerName; };
-	virtual string getPowerDescription() { return powerDescription; };
-	virtual int getTokenNumber() { return numOfToken; };
-	virtual int getVictoryCoin() { return numOfVictoryCoin; };
-
-	virtual void show();*/
-
+	int getPowerId();
+	void setPowerId(int);
 	string getPowerName();
 	void setPowerName(string);
 	int getVictoryCoin();
-	void setVictoryCoins(int);
+	virtual void setVictoryCoins(int);
 	int getTokenNumber();
 	void setTokenNumber(int);
 	bool getActiveCondition();
 	void setActiveCondition(bool);
-	string getPowerDescription();
-	void setPowerDescription(string);
+	int getImmuneNumber();
+	//void setTokenNumber(int);
+//	void setImmune(int, Region*);		//for some powers, they can be immune for some regions
+	bool checkImmuneSituation(int);
 
 };
 
@@ -51,6 +45,7 @@ public:
 class Alchemist : public PowerBudges {
 public:
 	Alchemist();
+	void setVictoryCoins(int);
 };
 
 class Berserk : public PowerBudges {
@@ -86,11 +81,13 @@ public:
 class Forest : public PowerBudges {
 public:
 	Forest();
+	void setVictoryCoins(int);
 };
 
 class Fortified : public PowerBudges {
 public:
 	Fortified();
+	void setVictoryCoins(int);
 };
 
 class Heroic : public PowerBudges {
@@ -101,11 +98,13 @@ public:
 class Hill : public PowerBudges {
 public:
 	Hill();
+	void setVictoryCoins(int);
 };
 
 class Merchant : public PowerBudges {
 public:
 	Merchant();
+	void setVictoryCoins(int);
 };
 
 class Mounted : public PowerBudges {
@@ -116,6 +115,7 @@ public:
 class Pillaging : public PowerBudges {
 public:
 	Pillaging();
+	void setVictoryCoins(int);
 };
 
 class Seafaring : public PowerBudges {
@@ -136,6 +136,7 @@ public:
 class Swamp : public PowerBudges {
 public:
 	Swamp();
+	void setVictoryCoins(int);
 };
 
 class Underworld : public PowerBudges {
@@ -146,6 +147,7 @@ public:
 class Wealthy : public PowerBudges {
 public:
 	Wealthy();
+	void setVictoryCoins(int);
 };
 
 #endif

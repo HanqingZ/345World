@@ -2,6 +2,7 @@
 #define DICE_H
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -12,8 +13,10 @@ private:
 public:
 	Dice();
 	~Dice();
-	int rollingResult(bool);
-//	int getRollintResult(int);
+	int rollingResult();
+	int getRollintPercent(int);
+
+	vector<int> rolls;
 };
 
 #endif

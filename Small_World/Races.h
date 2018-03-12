@@ -9,26 +9,29 @@ using namespace std;
 class Races {
 	
 protected: 
+	int raceId;
 	int numOfToken;
 	int numOfVictoryCoin;
 	string raceName;
 	bool active;
-	string raceDescription;
 
 public:		
 	Races();
 //	Races(int, int, string);
+	~Races();
 
+	int getRaceId();
+	void setRaceId(int);
 	string getRaceName();
 	void setRaceName(string);
 	int getVictoryCoin();
-	void setVictoryCoins(int);
+	virtual void setVictoryCoins(int);
 	int getTokenNumber();
 	void setTokenNumber(int);
 	bool getActiveCondition();
 	void setActiveCondition(bool);
-	string getRaceDescription();
-	void setRaceDescription(string);
+	int atConquer();
+	int atBattle();
 	
 };
 
@@ -37,11 +40,13 @@ public:
 class Amazon : public Races {
 public:
 	Amazon();
+	//int atConquer();	//for next assignment
 };
 
 class Dwarve : public Races {
 public:
 	Dwarve();
+	void setVictoryCoins(int);
 };
 	
 class Elve : public Races{
@@ -67,11 +72,13 @@ public:
 class Human : public Races {
 public:
 	Human();
+	void setVictoryCoins(int);
 };
 
 class Orcs : public Races {
 public:
 	Orcs();
+	void setVictoryCoins(int);
 };
 
 class Ratman : public Races {
@@ -102,6 +109,7 @@ public:
 class Wizard : public Races {
 public:
 	Wizard();
+	void setVictoryCoins(int);
 };
 
 #endif

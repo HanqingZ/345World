@@ -71,10 +71,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="testing.map">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </None>
     <None Include="Map2.map">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Map4.map">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Map3.map">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Map5.map">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="failedMap.map">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>

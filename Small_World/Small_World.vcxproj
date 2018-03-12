@@ -131,7 +131,11 @@
     <ClInclude Include="Region.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="failedMap.map" />
     <None Include="Map2.map" />
+    <None Include="Map3.map" />
+    <None Include="Map4.map" />
+    <None Include="Map5.map" />
     <None Include="testing.map" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

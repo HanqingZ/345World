@@ -8,7 +8,6 @@ using namespace std;
 
 Region::Region() {
 	this->regionId = 0;
-	this->regionName = "";
 	this->posX = 0;
 	this->posY = 0;
 	this->regionType = nullptr;
@@ -16,26 +15,40 @@ Region::Region() {
 	this->lairs = false;
 	this->cavern = false;
 	this->lostTribes = false;
-	//this->ownedByPlayer = nullptr;
-	//this->containToken = 0;
+	this->containTrollLairs = false;
+	this->containFortresses = false;
+	this->containEncampments = false;
+	this->ownerID = 100;
+	this->containToken = 0;
+	this->immune = false;
 }
 
-Region::Region(int rid, string rname, int px, int py, string rt) {
-	//	,bool m, bool la, bool c, bool lt
+Region::Region(int rid, int px, int py, string rt,
+	bool ca, bool lairs, bool ma, bool lt, bool water) {
 	this->regionId = rid;
-	this->regionName = rname;
 	this->posX = px;
 	this->posY = py;
 	this->regionType = rt;
-	//magic = m;
-	//lairs = la;
-	//cavern = c;
-	//lostTribes = lt;
+	this->ownerID = 100;
+	this->containToken = 0;
+	this->lairs = lairs;
+	this->cavern = ca;
+	this->magic = ma;
+	this->lostTribes = lt;
+	this->closeToWater = water;
+	this->containTrollLairs = false;
+	this->containFortresses = false;
+	this->containEncampments = false;
+	this->immune = false;
+
+	if (rt == "Mountain" || lt == true) {
+		this->containToken += 1;
+	}
 }
 
-/*Region::Region(int rid, Player owner, int ct) {
-	this->regionId = rid;
-	this->ownedByPlayer = &owner;
+
+/*Region::Region(int owner, int ct) {
+	this->ownerID = owner;
 	this->containToken = ct;
 }
 */
@@ -53,60 +66,130 @@ void Region::setRegionId(int rid)
 //	this->regionName = rn;
 //}
 
-//void Region::setPositionX(int px) {
-//	this->posX = px;
-//}
+/*
+void Region::setPositionX(int px) {
+	this->posX = px;
+}
 
-//void Region::setPositionY(int py) {
-//	this->posY = py;
-//}
+void Region::setPositionY(int py) {
+	this->posY = py;
+}
 
-//void Region::setRetionType(string rt) {
-//	this->regionType = rt;
-//}
+void Region::setRetionType(string rt) {
+	this->regionType = rt;
+}
+*/
 
-//void Region::setRegionFunc(string rf) {
-//	regionFunc.push_back(rf);
-//}
+void Region::setImmuneRegion() {
+	this->immune = true;
+}
 
-//void Region::setRegionOwner(Player pl) {
-//	this->ownedByPlayer = &pl;
-//}
+void Region::addContainToken(int tk) {
+	this->containToken += tk;
+}
 
-//void Region::setContainToken(int tk) {
-//	this->containToken = tk;
-//}
+void Region::minusContainToken(int tk){
+	this->containToken -= tk;
+}
+
+void Region::resetContainToken() {
+	this->containToken = 0;
+}
+
+void Region::setOwnerID(int idply) {
+	this->ownerID = idply;
+}
+
+void Region::setIsLostTribes(bool tf) {
+	this->lostTribes = tf;
+}
+
+void Region::setContainTrollLairs(bool tl) {
+	this->containTrollLairs = tl;
+}
+
+void Region::setContainFortresses(bool ft) {
+	this->containFortresses = ft;
+}
+
+void Region::setContainEncampments(bool ec) {
+	this->containEncampments = ec;
+}
 
 int Region::getRegionId() {
 	return regionId;
 }
 
-string Region::getRegionName() {
-	return regionName;
-}
-
 int Region::getPositionX() {
-	return posX;
+	return this->posX;
 }
 
 int Region::getPositionY() {
-	return posY;
+	return this->posY;
 }
 
-//string Region::getLogo() {
-//	return shownLogo;
-//}
+int Region::getOwnerId() {
+	return this->ownerID;
+}
 
-//Player Region::getRegionOwner() {
-//	return &&ownedByPlayer;
-//}
+int Region::getContainToken() {
+	return this->containToken;
+}
 
-//int Region::getContainToken() {
-//	return containToken;
-//}
+bool Region::getIsCavern() {
+	return this->cavern;
+}
+
+bool Region::getIsLairs() {
+	return this->lairs;
+}
+
+bool Region::getIsMagic() {
+	return this->magic;
+}
+
+bool Region::getIsLostTribes() {
+	return this->lostTribes;
+}
+
+bool Region::getIsCloseToWater() {
+	return this->closeToWater;
+}
+
+bool Region::getContainTrollLairs() {
+	return this->containTrollLairs;
+}
+
+bool Region::getContainFortresses() {
+	return this->containFortresses;
+}
+
+bool Region::getContainEncampments() {
+	return this->containEncampments;
+}
+
+bool Region::getImmuneRegion() {
+	return this->immune;
+}
 
 void Region::shown() {
-	cout << "This region#" << regionId << " is called " << regionName
-		<< " at (" << posX << "," << posY << "), and its type is "
+	cout << "This region#" << regionId << " at (" 
+		<< posX << "," << posY << "), and its type is "
 		<< regionType << "." << endl;
+	cout << "With Cavern? " << cavern << " With Lairs? "
+		<< lairs << " With Magic? " << magic
+		<< "\n With Lost Tribes? " << lostTribes
+		<< " Close to Water? " << closeToWater << endl;
+
+	if (containTrollLairs == true) {
+		cout << "This regions contains Troll Lairs.\n";
+	}
+	if (containFortresses == true) {
+		cout << "This regions contains Fortresses.\n";
+	}
+	if (containEncampments == true) {
+		cout << "This regions contains Encampments.\n";
+	}
+
+	cout << endl;
 }

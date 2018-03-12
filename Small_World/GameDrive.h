@@ -3,38 +3,38 @@
 
 #include "Player.h"
 #include "MapLoader.h"
-#include "Map.h"
+//#include "Map.h"
 
 #include <array>
 #include <string>
 using namespace std;
 
 class GameDrive {
-protected:
-	Player** player;
+private:
+	Player ply;
 	int numOfPlayer;
-	//number of turn is from 0 to 9
-	int numOfTurn;
+	int numOfTurn; //number of turn is from 0 to 10
 	int numOfCombo;
 	bool playerNumCheck;
 	Races r;
 	PowerBudges pb;
-	Map testmap;
 	MapLoader testMap;
 
 public:
 	GameDrive();
 	~GameDrive();
-	void setUp();
+
+	//Main methods
 	void start();
 
-	void chooseMap(int);
+	//Adjective methods
+	void chooseMapType(int);
 	void charaCombo();
-//	void setPersonalCombo(int);
 	string shufflePickRace(int);
 	string shufflePickPower(int);
 	void setRaceType(Races);
 	void setPowerType(PowerBudges);
+
 };
 
 #endif

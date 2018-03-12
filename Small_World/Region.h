@@ -5,14 +5,13 @@
 #include <string>
 #include <vector>
 
-#include "Player.h"
+//#include "Player.h"
 
 using namespace std;
 
 class Region {
-protected:
 	/*enum RegionType {
-	Montain, Forest, Lac,
+	Montain, Forest, Lake,
 	Hill, Swamp, Farmland
 	};
 	enum RegionFunc {
@@ -21,50 +20,66 @@ protected:
 	};*/
 protected:
 	int regionId;
-	string regionName;
+	//string regionName;
 	int posX;
 	int posY;
 	string regionType;
-	bool magic;
+	int ownerID;
+	int containToken;
 	bool lairs;
 	bool cavern;
+	bool magic;
 	bool lostTribes;
-
-	//	string shownLogo;
-
+	bool closeToWater;
+	bool containTrollLairs;
+	bool containFortresses;
+	bool containEncampments;
+	bool immune;
 
 public:
 	Region();
-	Region(int, string, int, int, string
-		//		, bool, bool, bool, bool
-	);
-	Region(int, Player, int);
+	Region(int, int, int, string, bool, bool, bool, bool, bool);
+	//Region(int, int);
 	~Region();
 
 	void setRegionId(int);
-	void setRegionName(string);
-	void setPositionX(int);
-	void setPositionY(int);
-	void setRetionType(string);
-	//	void setRegionFunc(string);
-	//	void setLogo(string);
-	void setRegionOwner(Player);
-	void setContainToken(int);
+	//void setRegionName(string);
+	//void setPositionX(int);
+	//void setPositionY(int);
+	//void setRetionType(string);
+	//void setRegionFunc(string);
+	//void setRegionOwner(Player*);
+	void addContainToken(int);
+	void minusContainToken(int);
+	void resetContainToken();
+	void setImmuneRegion();
+	void setOwnerID(int);
+	void setIsLostTribes(bool);
+	void setContainTrollLairs(bool);
+	void setContainFortresses(bool);
+	void setContainEncampments(bool);
 
 	int getRegionId();
-	string getRegionName();
+	//string getRegionName();
 	int getPositionX();
 	int getPositionY();
-	string getRetionType() { return regionType; };
-	//string getLogo();
-	//Player getRegionOwner();
+	string getRegionType() { return regionType; };
+	int getOwnerId();
 	int getContainToken();
+	bool getIsCavern();
+	bool getIsLairs();
+	bool getIsLostTribes();
+	bool getIsMagic();
+	bool getIsCloseToWater();
+	bool getContainTrollLairs();
+	bool getContainFortresses();
+	bool getContainEncampments();
+	bool getImmuneRegion();
 
 	void shown();
 
-
-	Player* ownedByPlayer;
-	int containToken;
+	//Player* ownedByPlayer;
+	
 	//	string regionFunc[];
 };
 

@@ -18,20 +18,22 @@ vector<int> rv;
 vector<int> pv;
 
 GameDrive::GameDrive() {
-	
+
 }
 
 GameDrive::~GameDrive() {
 
 }
 
-void GameDrive::setUp() {
+void GameDrive::start() {
 
 	numOfTurn = 0;
 	int np = 0;
 	playerNumCheck = false;
 
-	//insert the number of players of this game
+/*
+** 	Part 1 Insert the number of players of this game
+*/
 	cout << "How many people play this game? (2 to 5)" << endl;
 	while (!playerNumCheck) {
 		try {
@@ -44,24 +46,41 @@ void GameDrive::setUp() {
 				throw "Please take a number between 2 to 5.";
 			}
 		}
-		catch (exception e) {
+		catch(exception e){
 			cout << "How many people play this game? (2 to 5)" << endl;
 		}
 	}
 
-	chooseMap(numOfPlayer);
+	/*
+	** 	Part 1 Load the selected map based on number of players
+	** 	Part 2 All information about the maps has been printed
+	**	If the selected map is not a graph, system stop
+	*/
+	chooseMapType(this->numOfPlayer);
+	while (!testMap.checkIfIsMap()) {
+		exit(1);
+	}
 
-	//create number of user at beginning
-	player = new Player*[numOfPlayer];
 
+	cout << "Now is Turn #" << numOfTurn <<endl;
 
+	/*
+	** 	When turn is 0, the race and special power has been shuffled
+	** 	Print the combo of race and special power
+	*/
+	charaCombo();
 
-	//print the combo of race and special power
-	//and let players pick one combo
-	for (int i = 0; i < numOfPlayer; i++) {
-		charaCombo();
+	numOfTurn++;
 
-		player[i] = new Player(i + 1);
+	/*
+	** 	Part 1.2 The right number of players is created
+	** 	Part 3.1 and Part 4 Pick a Race and Special Power Combo
+	** 	At the beginning of the game, the number of players has been
+	** 	created and they allow to pick one combo from the six visible
+	** 	combos.
+	*/
+	for(int i = 0; i < numOfPlayer; ++i){
+		ply = Player(i + 1);
 
 		cout << "Player #" << i + 1 << endl;
 		cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
@@ -69,74 +88,91 @@ void GameDrive::setUp() {
 
 		string sl = shufflePickRace(rv[numOfCombo - 1]);
 		string s2 = shufflePickPower(pv[numOfCombo - 1]);
-
-		//set player's race and special power
-		player[i]->pick_race(r, pb);
+		
+		ply.pick_race(r, pb);
 		rv.erase(rv.begin() + numOfCombo - 1);
 		pv.erase(pv.begin() + numOfCombo - 1);
 
+		ply.minusCoins(numOfCombo - 1);
+		cout << "You owns " << ply.getCoins() <<" coins.\n";
+
+		ply.players.push_back(ply);
+
+		charaCombo();
 	}
-}
 
-//start the game
-void GameDrive::start() {
 
-	for (numOfCombo = 1; numOfCombo <= 10; numOfCombo++) {
-		cout << "Now is Turn #" << numOfTurn <<endl;
-		//Print the map
 
-		for (int j = 0; j < numOfPlayer; j++) {
-
-			if (player[j]->getRaces().getActiveCondition() == false) {
-
-				charaCombo();
-				cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
-				cin >> numOfCombo;
-				
-				string sl = shufflePickRace(rv[numOfCombo - 1]);
-				string s2 = shufflePickPower(pv[numOfCombo - 1]);
-
-				//set player's race and special power
-				player[j]->pick_race(r, pb);
-				rv.erase(rv.begin() + numOfCombo - 1);
-				pv.erase(pv.begin() + numOfCombo - 1);
-			}
-
-			player[j]->conquers();
-
+	// Part 7 Following turns
+	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
+		cout << "Now is Turn #" << numOfTurn << endl;
+		/*
+		** 	Part 3.2 and Part 5 Conquers some regions and Redeployment
+		**	Part 3.3 and Part 6 Scoring victory coins
+		**	Details are in Player.h and Player.cpp
+		*/
+		for (int j = 0; j < numOfPlayer; ++j) {
+			ply.players[j].conquers(testMap, numOfTurn);
+			ply.players[j].redployment(testMap);
+			ply.players[j].score(testMap);
 		}
 	}
 
-	//for test the Dice class Part 3
-	Dice d;
-	d.rollingResult(true);
+	/*
+	int winnerId = ply.players[0].getPlayerId();
+	for (int j = 1; j < numOfPlayer; ++j) {		
+		if (ply.players[j-1].getCoins() <= ply.players[j].getCoins()) {
+			winnerId = ply.players[j + 1].getPlayerId();
+		}
+	}
+	*/
 
+	cout << "Thank you for enjoy this game.\n";
 }
 
-//read corresponding map
-void GameDrive::chooseMap(int nOfPly) {
-	switch (nOfPly){
+/*
+**	Part 1.1 Choose a map depends on number of player
+*/
+void GameDrive::chooseMapType(int numOfPlayer) {
+	
+	switch (numOfPlayer)
+	{
 	case 2:
-		testMap.mapReader("Map2.map");
+		this->testMap.mapReader("Map2.map");
+		//testMap.printAsImage();
 		break;
 	case 3:
-		testMap.mapReader("Map3.map");
+		this->testMap.mapReader("Map3.map");
+		//testMap.printAsImage();
 		break;
 	case 4:
-		testMap.mapReader("Map4.map");
+		this->testMap.mapReader("Map4.map");
+		//testMap.printAsImage();
 		break;
 	case 5:
-		testMap.mapReader("Map5.map");
+		this->testMap.mapReader("Map5.map");
+		//testMap.printAsImage();
+		break;
+	case 10:
+		this->testMap.mapReader("failedMap.map");
 		break;
 	default:
+		this->testMap.mapReader("testing.map");
 		break;
 	}
 }
 
-int myrandom(int i) { 
-		return std::rand() % i; }
 
-//shuffle the race banners and special power badges
+int myrandom(int i) {
+	return std::rand() % i;
+}
+
+/*
+** 	Part 2.2 and 2.3 
+** 	Shuffling all the Race banners and Special Power badges
+** 	At the beginning of the game
+** 	For the rest of the turn, just print the combo
+*/
 void GameDrive::charaCombo() {
 
 	srand((unsigned)time(0));
@@ -158,12 +194,14 @@ void GameDrive::charaCombo() {
 		string r = shufflePickRace(rv.at(j));
 		string p = shufflePickPower(pv.at(j));
 		
-		cout << j + 1 << ".   " << r << "\twith \t" << p  << endl;
+		cout << j + 1 << ".   " << r << " with " << p  << endl;
 	}
 
 }
 
-//index for race banners
+/*
+** 	Part 2.2 Index for race banners
+*/
 string GameDrive::shufflePickRace(int num) {
 	switch (num) {
 	case 0: 
@@ -228,7 +266,9 @@ string GameDrive::shufflePickRace(int num) {
 	}
 }
 
-//index for special power badges
+/*
+** 	Part 2.3 Index for special power badges
+*/
 string GameDrive::shufflePickPower(int num) {
 
 	switch (num) {
@@ -325,3 +365,4 @@ void GameDrive::setRaceType(Races rcs) {
 void GameDrive::setPowerType(PowerBudges pbs) {
 	this->pb = pbs;
 }
+

@@ -1,54 +1,57 @@
 [Map]
 Name=map2
 number of player=2
-size=6x9
+width=6
+length=9
+
+Cavern,Lairs,Magic,LostTribes,closeToSea
 
 [Region]
-0,North Sea,0,0,Lake
-1,Volcanos,2,0,Mountain
-2,Lost Country,4,0,Farmland
-3,Abandon Swamp,6,0,Swamp
-4,Small Boxoc,0,2,Farm
-5,Green Garden,2,2,Hill
-6,Moglico,6,2,Hill
-7,Ganguous,4,3,Forest
-8,North Tree,0,4,Forest
-9,Centual,3,4,Lake
-10,Destory,6,4,Swamp
-11,Top Swamp,0,6,Swamp
-12,Barren Mountain,2,6,Mountain
-13,Sweet Farm,4,6,Farm
-14,Small Mountain,6,6,Mountain
-15,Fertile Farm,1,7,Farm
-16,Greatum,3,7,Hill
-17,Dryty,6,7,Swamp
-18,Little Dwarf,5,8,Forest
-19,Glicog,0,9,Hill
-20,Shepherd,2,9,Forest
-21,Twin Mounts,4,9,Mountain
-22,South Sea,6,9,Lake
+0,0,0,Sea,F,F,F,F,F
+1,0,2,Mountain,T,T,F,F,T
+2,0,4,Farmland,F,F,F,T,T
+3,0,6,Swamp,F,F,T,T,T
+4,2,0,Farmland,F,F,T,F,T
+5,2,2,Hill,F,F,F,T,T
+6,2,6,Hill,T,F,F,F,F
+7,3,4,Forest,F,F,F,T,T
+8,4,0,Forest,F,T,F,F,T
+9,4,3,Lake,F,F,F,F,F
+10,4,6,Swamp,F,T,F,T,T
+11,6,0,Swamp,T,F,F,T,T
+12,6,2,Mountain,F,F,F,F,T
+13,6,4,Farmland,F,F,T,F,T
+14,6,6,Mountain,F,F,F,F,F
+15,7,1,Farmland,F,F,F,F,F
+16,7,3,Hill,T,F,F,T,F
+17,7,6,Swamp,F,F,F,F,T
+18,8,5,Forest,F,F,F,F,T
+19,9,0,Hill,F,F,F,F,F
+20,9,2,Forest,F,F,T,T,F
+21,9,4,Mountain,F,T,F,F,F
+22,9,6,Sea,F,F,F,F,F
 
 [Edges]
-0->1,4
-1->0,2,4,5
-2->1,3,5,6,7
-3->2,6
-4->0,1,5,8
-5->1,2,4,7,8,9
-6->2,3,7,10
-7->2,5,6,9,10,13
-8->4,5,9,11,12
-9->5,7,8,12,13
-10->6,7,13,14
-11->8,12,15,19
-12->8,9,11,13,15,16
-13->7,9,1012,14,16,17
-14->10,13,17
-15->11,12,16,19,20
-16->12,13,15,17,18,20,21
-17->13,14,16,18,22
-18->16,17,21,22
-19->11,15,20
-20->15,16,19,21
-21->18,20,22
-22->17,18,21
+0>1,4,.
+1>0,2,4,5,.
+2>1,3,5,6,7,.
+3>2,6,.
+4>0,1,5,8,.
+5>1,2,4,7,8,9,.
+6>2,3,7,10,.
+7>2,5,6,9,10,13,.
+8>4,5,9,11,12,.
+9>5,7,8,12,13,.
+10>6,7,13,14,.
+11>8,12,15,19,.
+12>8,9,11,13,15,16,.
+13>7,9,10,12,14,16,17,.
+14>10,13,17,.
+15>11,12,16,19,20,.
+16>12,13,15,17,18,20,21,.
+17>13,14,16,18,22,.
+18>16,17,21,22,.
+19>11,15,20,.
+20>15,16,19,21,.
+21>18,20,22,.
+22>17,18,21,;

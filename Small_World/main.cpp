@@ -23,8 +23,8 @@ int main() {
 		}
 */
 	GameDrive game;
-	game.setUp();
 	game.start();
+
 	
 	cin >> c;
 

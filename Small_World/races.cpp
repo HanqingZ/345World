@@ -5,11 +5,11 @@ using namespace std;
 
 
 Races::Races() {
+	this->raceId = 0;
 	this->numOfToken = 0;
 	this->numOfVictoryCoin = 0;
 	this->active = false;
-	this->raceName = "null";
-	this->raceDescription = "null";
+	this->raceName = "";
 }
 
 //Races::Races(int tk, int vc, string race) {
@@ -18,6 +18,17 @@ Races::Races() {
 //	this->raceName = race;
 //}
 
+Races::~Races() {
+
+}
+
+int Races::getRaceId() {
+	return raceId;
+}
+
+void Races::setRaceId(int rid) {
+	this->raceId = rid;
+}
 
 string Races::getRaceName() {
 	return raceName;
@@ -50,126 +61,119 @@ void Races::setActiveCondition(bool ac) {
 	this->active = ac;
 }
 
-string Races::getRaceDescription() {
-//	cout << raceDescription << endl;
-	return raceDescription;
-}
-
-void Races::setRaceDescription(string rd) {
-	this->raceDescription = rd;
-}
-
 
 //===================================================================
 
 Amazon::Amazon() {
-	setRaceName("Amazon");
-//	setVictoryCoins(0);
-	setTokenNumber(6);
-	setActiveCondition(true);
-	setRaceDescription("Four of your Amazon tokens may only beused for conquest, not for defense, as indicated by the +4 on the banner itself. So you start your initial turn with 10 Amazon tokens (plus any additional ones that may be granted to you by the Special Power associated with the Amazons, depending on your combo). At the end of each of your Troop Redeployments (see Troop Redeployment, p. 5), remove four tokens from the map, making sure to leave at least one Amazon token in each of your Regions if possible, and only take these four tokens back in hand to redeploy on the map once you Ready your Troops (see Ready your Troops, p. 6) at the start of your next turn.");
+	this->raceId = 0;
+	this->numOfToken = 6;
+	this->active = true;
+	this->raceName = "Amazon";
 }
+/*int Amazon::atConquer() {
+	return this->numOfToken += 4;
+}
+*/
 
 Dwarve::Dwarve() {
-	setRaceName("Amazon");
-//	setVictoryCoins(0);
-	setTokenNumber(3);
-	setActiveCondition(true);
-	setRaceDescription("Each Mine Region your Dwarves occupy is worth 1 bonus Victory coin, at the end of your turn. This power is kept even when the Dwarves are In Decline.");
+	this->raceId = 1;
+	this->numOfToken = 3;
+	this->active = true;
+	this->raceName = "Dwarve";
+}
+void Dwarve::setVictoryCoins(int cn) {
+	cn += 1;
 }
 
 Elve::Elve() {
-	setRaceName("Elve");
-//	setVictoryCoins(0);
-	setTokenNumber(6);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 2;
+	this->raceName = "Elve";
+	this->numOfToken = 6;
+	this->active = true;
 }
 
 Ghoul::Ghoul() {
-	setRaceName("Ghoul");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 3;
+	this->raceName = "Ghoul";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Giant::Giant() {
-	setRaceName("Giant");
-	//	setVictoryCoins(0);
-	setTokenNumber(6);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 4;
+	this->raceName = "Giant";
+	this->numOfToken = 6;
+	this->active = true;
 }
 
 Halfling::Halfling() {
-	setRaceName("Halfling");
-	//	setVictoryCoins(0);
-	setTokenNumber(6);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 5;
+	this->raceName = "Halfling";
+	this->numOfToken = 6;
+	this->active = true;
 }
 
 Human::Human() {
-	setRaceName("Human");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 6;
+	this->raceName = "Human";
+	this->numOfToken = 5;
+	this->active = true;
+}
+void Human::setVictoryCoins(int cn) {
+	cn += 1;
 }
 
 Orcs::Orcs() {
-	setRaceName("Orcs");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 7;
+	this->raceName = "Orcs";
+	this->numOfToken = 5;
+	this->active = true;
+}
+void Orcs::setVictoryCoins(int cn) {
+	cn += 1;
 }
 
 Ratman::Ratman() {
-	setRaceName("Ratman");
-	//	setVictoryCoins(0);
-	setTokenNumber(8);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 8;
+	this->raceName = "Ratman";
+	this->numOfToken = 8;
+	this->active = true;
 }
 
 Skeleton::Skeleton() {
-	setRaceName("Skeleton");
-	//	setVictoryCoins(0);
-	setTokenNumber(6);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 9;
+	this->raceName = "Skeleton";
+	this->numOfToken = 6;
+	this->active = true;
 }
 
 Sorcerer::Sorcerer() {
-	setRaceName("Sorcerer");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 10;
+	this->raceName = "Sorcerer";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Triton::Triton() {
-	setRaceName("Triton");
-	//	setVictoryCoins(0);
-	setTokenNumber(6);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 11;
+	this->raceName = "Triton";
+	this->numOfToken = 6;
+	this->active = true;
 }
 
 Troll::Troll() {
-	setRaceName("Skeleton");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 12;
+	this->raceName = "Skeleton";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Wizard::Wizard() {
-	setRaceName("Wizard");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setActiveCondition(true);
-	setRaceDescription(" ");
+	this->raceId = 13;
+	this->raceName = "Wizard";
+	this->numOfToken = 5;
+	this->active = true;
+}
+void Wizard::setVictoryCoins(int cn) {
+	cn += 1;
 }

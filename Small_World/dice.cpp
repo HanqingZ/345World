@@ -15,8 +15,7 @@ Dice::~Dice() {
 }
 
 //Rolling the special dice and get the result
-int Dice::rollingResult(bool turnStatus) {
-	vector<int> rolls;
+int Dice::rollingResult() {
 
 	srand((unsigned)time(0));
 	rolldice = rand() % 6;
@@ -34,19 +33,13 @@ int Dice::rollingResult(bool turnStatus) {
 
 }
 
-/*
-//Compare and get the selected region
-int Dice::getRollintResult(int a) {
-	cout << "How many races you want to place?" << endl;
-	cin >> placedRace;
-
-	int i = rollingResult(true);
-
-	if ((placedRace + )) {
-
+int Dice::getRollintPercent(int a)
+{
+	int sum = 0;
+	for (size_t i = 0; i < rolls.size(); i++) {
+		if (rolls[i] == a) {
+			sum++;
+		}
 	}
-	else {
-	
-	}
+	return sum/rolls.size();
 }
-*/

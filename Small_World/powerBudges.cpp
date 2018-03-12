@@ -5,12 +5,25 @@
 using namespace std;
 
 PowerBudges::PowerBudges() {
-
+	this->powerId = NULL;
 	this->powerName = "";
 	this->numOfToken = 0;
 	this->numOfVictoryCoin = 0;
-	this->powerDescription = "";
+	this->active = false;
+	this->immune = 0;
 
+}
+
+PowerBudges::~PowerBudges() {
+
+}
+
+int PowerBudges::getPowerId() {
+	return powerId;
+}
+
+void PowerBudges::setPowerId(int pid) {
+	this->powerId = pid;
 }
 
 string PowerBudges::getPowerName() {
@@ -36,13 +49,38 @@ void PowerBudges::setTokenNumber(int tn) {
 	this->numOfToken = tn;
 }
 
-string PowerBudges::getPowerDescription() {
-	//	cout << raceDescription << endl;
-	return powerDescription;
+int PowerBudges::getImmuneNumber() {
+	return immune;
 }
 
-void PowerBudges::setPowerDescription(string pd) {
-	this->powerDescription = pd;
+bool PowerBudges::getActiveCondition() {
+	return active;
+}
+
+void PowerBudges::setActiveCondition(bool ac) {
+	this->active = ac;
+}
+
+/*
+void PowerBudges::setImmune(int numOfImmune, Region *rg) {
+	int i = 0;
+	while (i < numOfImmune) {
+		
+		i++;
+	}
+}
+*/
+
+bool PowerBudges::checkImmuneSituation(int numOfImmune) {
+	if (numOfImmune == 1 || numOfImmune == 2) {
+		
+		return true;
+	}	
+	else if (numOfImmune >= 100) {
+
+		return true;
+	}
+	return false;
 }
 
 
@@ -50,165 +88,171 @@ void PowerBudges::setPowerDescription(string pd) {
 
 
 Alchemist::Alchemist() {
-	setPowerName("Amazon");
-//	setVictoryCoins(0);
-	setTokenNumber(4);
-	setPowerDescription("");
+	this->powerId = 0;
+	this->powerName = "Amazon";
+	this->numOfToken = 4;
+	this->active = true;
+}
+
+void Alchemist::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += 2;
 }
 
 Berserk::Berserk() {
-	setPowerName("Berserk");
-//	setVictoryCoins(0);
-	setTokenNumber(4);
-	setPowerDescription("");
+	this->powerId = 1;
+	this->powerName = "Berserk";
+	this->numOfToken = 4;
+	this->active = true;
 }
 
 Bivouacking::Bivouacking() {
-	setPowerName("Bivouacking");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 2;
+	this->powerName = "Bivouacking";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Commando::Commando() {
-	setPowerName("Commando");
-//	setVictoryCoins(0);
-	setTokenNumber(4);
-	setPowerDescription("");
+	this->powerId = 3;
+	this->powerName = "Commando";
+	this->numOfToken = 4;
+	this->active = true;
 }
 
 Diplomat::Diplomat() {
-	setPowerName("Diplomat");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 4;
+	this->powerName = "Diplomat";
+	this->numOfToken = 5;
+	this->active = true;
+	this->immune = 100;
 }
 
 DragonMaster::DragonMaster() {
-	setPowerName("DragonMaster");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 5;
+	this->powerName = "DragonMaster";
+	this->numOfToken = 5;
+	this->active = true;
+	this->immune = 1;
 }
 
 Flying::Flying() {
-	setPowerName("Flying");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 6;
+	this->powerName = "Flying";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Forest::Forest() {
-	setPowerName("Forest");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 7;
+	this->powerName = "Forest";
+	this->numOfToken = 5;
+	this->active = true;
+}
+void Forest::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += cn;
 }
 
 Fortified::Fortified() {
-	setPowerName("Fortified");
-//	setVictoryCoins(0);
-	setTokenNumber(3);
-	setPowerDescription("");
+	this->powerId = 8;
+	this->powerName = "Fortified";
+	this->numOfToken = 3;
+	this->active = true;
+}
+void Fortified::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += cn;
 }
 
 Heroic::Heroic() {
-	setPowerName("Heroic");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 9;
+	this->powerName = "Heroic";
+	this->numOfToken = 5;
+	this->active = true;
+	this->immune = 2;
 }
 
 Hill::Hill() {
-	setPowerName("Hill");
-//	setVictoryCoins(0);
-	setTokenNumber(4);
-	setPowerDescription("");
+	this->powerId = 10;
+	this->powerName = "Hill";
+	this->numOfToken = 4;
+	this->active = true;
+}
+void Hill::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += cn;
 }
 
 Merchant::Merchant() {
-	setPowerName("Merchant");
-//	setVictoryCoins(0);
-	setTokenNumber(2);
-	setPowerDescription("");
+	this->powerId = 11;
+	this->powerName = "Merchant";
+	this->numOfToken = 2;
+	this->active = true;
+}
+void Merchant::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += cn;
 }
 
 Mounted::Mounted() {
-	setPowerName("Mounted");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 12;
+	this->powerName = "Mounted";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Pillaging::Pillaging() {
-	setPowerName("Pillaging");
-//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 13;
+	this->powerName = "Pillaging";
+	this->numOfToken = 5;
+	this->active = true;
+}
+void Pillaging::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += cn;
 }
 
 Seafaring::Seafaring() {
-	setPowerName("Seafaring");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 14;
+	this->powerName = "Seafaring";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Spirit::Spirit() {
-	setPowerName("Spirit");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 15;
+	this->powerName = "Spirit";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Stout::Stout() {
-	setPowerName("Stout");
-	//	setVictoryCoins(0);
-	setTokenNumber(4);
-	setPowerDescription("");
+	this->powerId = 16;
+	this->powerName = "Stout";
+	this->numOfToken = 4;
+	this->active = true;
 }
 
 Swamp::Swamp() {
-	setPowerName("Swamp");
-	//	setVictoryCoins(0);
-	setTokenNumber(4);
-	setPowerDescription("");
+	this->powerId = 17;
+	this->powerName = "Swamp";
+	this->numOfToken = 4;
+	this->active = true;
+}
+void Swamp::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += cn;
 }
 
 Underworld::Underworld() {
-	setPowerName("Underworld");
-	//	setVictoryCoins(0);
-	setTokenNumber(5);
-	setPowerDescription("");
+	this->powerId = 18;
+	this->powerName = "Underworld";
+	this->numOfToken = 5;
+	this->active = true;
 }
 
 Wealthy::Wealthy() {
-	setPowerName("Wealthy");
-	//	setVictoryCoins(0);
-	setTokenNumber(4);
-	setPowerDescription("");
+	this->powerId = 19;
+	this->powerName = "Wealthy";
+	this->numOfToken = 4;
+	this->active = true;
+}
+void Wealthy::setVictoryCoins(int cn) {
+	this->numOfVictoryCoin += 7;
 }
 
-/*
-void Alchemist::setPowerName() {
-	this->powerName = "Alchemist";
-}
 
-void Alchemist::setPowerDescription() {
-	this->powerDescription = "Collect 2 bonus Victory coins at the end of each turn your race hasn't yet gone into Decline.";
-}
-
-void Alchemist::setTokenNumber() {
-	this->numOfToken = 0;
-}
-
-void Alchemist::setVictoryCoin() {
-	this->numOfVictoryCoin = 2;
-}
-
-void Alchemist::show() {
-	string pn = getPowerName();
-	string pd = getPowerDescription();
-	cout << pn << ": " << pd << endl;
-}
-*/
