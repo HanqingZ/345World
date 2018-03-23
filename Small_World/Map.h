@@ -1,9 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-//#include "MapLoader.h"
-//#include "Region.h"
-
 #include <iostream>
 #include <string>
 #include <vector>

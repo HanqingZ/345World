@@ -6,27 +6,6 @@
 
 using namespace std;
 
-/*
-Nodes::Nodes() {
-
-}
-
-Nodes::~Nodes() {
-
-}
-
-void Nodes::addLink(int v) {
-	lists.push_back(v);
-}
-
-void Nodes::printLink() {
-	for (auto i : lists) {
-		cout << i << " ";
-	}
-}
-*/
-
-//===============================================================
 
 Map::Map() {
 	

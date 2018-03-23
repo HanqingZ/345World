@@ -12,6 +12,7 @@ using namespace std;
 class GameDrive {
 private:
 	Player ply;
+	Player plys;
 	int numOfPlayer;
 	int numOfTurn; //number of turn is from 0 to 10
 	int numOfCombo;

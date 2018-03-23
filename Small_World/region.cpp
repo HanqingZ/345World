@@ -62,10 +62,6 @@ void Region::setRegionId(int rid)
 	this->regionId = rid;
 }
 
-//void Region::setRegionName(string rn) {
-//	this->regionName = rn;
-//}
-
 /*
 void Region::setPositionX(int px) {
 	this->posX = px;

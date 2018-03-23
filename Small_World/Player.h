@@ -35,11 +35,11 @@ public:
 	Player(int);
 	~Player();
 
-	void pick_race(Races&, PowerBudges&);
-	void conquers(MapLoader&, int);
-	void redployment(MapLoader&);
-	void score(MapLoader&);
-	void chooseDecline(MapLoader&);
+	void pick_race(Races&, PowerBudges&, vector<Player>&);
+	void conquers(MapLoader&, int, vector<Player>&);
+	void redployment(MapLoader&, vector<Player>&);
+	void score(MapLoader&, vector<Player>&);
+	void chooseDecline(MapLoader&, vector<Player>&);
 
 	void minusCoins(int);
 	void addCoins(int);
@@ -48,6 +48,7 @@ public:
 	int getTokenNumber();
 	int getPlayerId();
 	//void setRegionSet(int);
+	void shown();
 
 	list<int> ownedRegionSet;
 	vector<Races> race;

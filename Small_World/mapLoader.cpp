@@ -58,7 +58,6 @@ void MapLoader::mapReader(string file) {
 
 		mapFile.close();
 
-		checkIfIsMap();
 	}
 }
 
