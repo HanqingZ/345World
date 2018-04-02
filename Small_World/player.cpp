@@ -11,6 +11,7 @@ using namespace std;
 
 Player::Player() {
 	this->id = 0;
+	this->isComputer = false;
 	this->coinOwn = 5;
 	this->numOfTokenOwn = 0;
 	this->race.clear();
@@ -20,6 +21,7 @@ Player::Player() {
 
 Player::Player(int userId) {
 	this->id = userId;
+	this->isComputer = false;
 	this->coinOwn = 5;
 	this->numOfTokenOwn = 0;
 	this->race.clear();
@@ -32,9 +34,14 @@ Player::~Player() {
 }
 
 /*
-**	Part 2 Player pick a Race and Super Power Combo
-**	If player already have a combo,
-**	he/she should set previous to be decline
+void Player::setStrategy(MapLoader &mploader, int numberOfTurn, vector<Player> &player) {
+	cout << "You don't have strategy to choose.\n";
+}
+*/
+
+/*
+**	Player pick a Race and Super Power Combo
+**	If player already have a combo, he/she should set previous to be decline
 **	Once per Player
 */
 void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
@@ -46,9 +53,9 @@ void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
 			p.setActiveCondition(false);
 		}
 	}
-	race.push_back(rs);
-	powerbudge.push_back(ps);
-	this->numOfTokenOwn = rs.getTokenNumber() + ps.getTokenNumber();
+	addRace(rs);
+	addPower(ps);
+	this->numOfTokenOwn += rs.getTokenNumber() + ps.getTokenNumber();
 	cout << "You pick the race " << rs.getRaceName()
 		<< " with special power " << ps.getPowerName()
 		<< " owns " << numOfTokenOwn << " tokens on hand ";
@@ -66,14 +73,10 @@ void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &pla
 		if (player[id].ownedRegionSet.empty()) {
 			mploader.printOnlySideRegion();
 		}
-		//else if (player[id].getTokenNumber() < 2) {
-			//break;
-		//}
-		//Following turn Conquer
 		else {
 			cout << "You own:" << endl;
 			for (auto i : player[id].ownedRegionSet) {
-				mploader.regions[i].shown();
+				cout << i << " ";
 			}
 			cout << "Please choose one region which's surrounding you want to pick.\n";
 			cin >> regionId;
@@ -120,13 +123,10 @@ void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &pla
 				mploader.regions[regionId].setIsLostTribes(false);
 			}
 			mploader.regions[regionId].addContainToken(numOfToken);
-			player[id].ownedRegionSet.push_back(regionId);
+			player[id].addJoinRegion(regionId);
 			cout << "Success Conquer! \n";
 		}
-
-		
 	}
-
 }
 
 //Redeployment
@@ -263,6 +263,7 @@ void Player::score(MapLoader &mploader, vector<Player>& player) {
 		
 	this->coinOwn += ownedRegionSet.size();
 	cout << "You owns " << coinOwn << " coins.\n";
+
 }
 
 void Player::chooseDecline(MapLoader &mploader, vector<Player>& player) {
@@ -288,14 +289,42 @@ void Player::chooseDecline(MapLoader &mploader, vector<Player>& player) {
 
 void Player::minusCoins(int coins) {
 	this->coinOwn -= coins;
+	//Notify(this);
 }
 
 void Player::addCoins(int coins) {
 	this->coinOwn += coins;
+	//Notify(this);
 }
 
-void Player::setNumOfToken(int token) {
+void Player::addNumOfToken(int token) {
 	this->numOfTokenOwn += token;
+	//Notify(this);
+}
+
+void Player::minusNumOfToken(int token) {
+	this->numOfTokenOwn -= token;
+	//Notify(this);
+}
+
+void Player::resetNumOfToken() {
+	this->numOfTokenOwn = 0;
+	//Notify(this);
+}
+
+void Player::addRace(Races rs) {
+	race.push_back(rs);
+	//Notify(this);
+}
+
+void Player::addPower(PowerBudges pb) {
+	powerbudge.push_back(pb);
+	//Notify(this);
+}
+
+void Player::addJoinRegion(int rg) {
+	ownedRegionSet.push_back(rg);
+	//Notify(this);
 }
 
 int Player::getCoins() {
@@ -309,6 +338,16 @@ int Player::getTokenNumber() {
 int Player::getPlayerId() {
 	return this->id;
 }
+
+bool Player::getIsComputer() {
+	return this->isComputer;
+}
+
+
+//vector<Region> Player::getOwnedRegion(int) {
+
+//}
+
 
 void Player::shown() {
 	cout << "Your id is " << id << ", and your token number is " 

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,9 +15,7 @@ MapLoader::~MapLoader() {
 
 }
 
-/*
-** 	Part 1.1 Read the selected map depends on number of players
-*/
+//Read the selected map depends on number of players
 void MapLoader::mapReader(string file) {
 	{
 		ifstream mapFile;
@@ -62,7 +61,7 @@ void MapLoader::mapReader(string file) {
 }
 
 /*
-** Read the [Map] part of the map file
+**	 Read the [Map] part of the map file
 ** 	set the value of mapLength and mapWidth
 */
 void MapLoader::getFileRead(ifstream& mapfile) {
@@ -96,12 +95,10 @@ void MapLoader::getRegions(ifstream& mapfile) {
 	string lines;
 	string spaced = ",";
 	int regionId;
-	//string regionName;
 	int posX;
 	int posY;
 	string regionType;
 	string ca, lai, ma, lt, ctw;
-	//string regionFunc;
 
 	while (!mapfile.eof()) {
 		while (getline(mapfile, lines) && lines != "") {
@@ -185,9 +182,7 @@ void MapLoader::getEdges(ifstream& mapfile) {
 
 //=========================================================================
 
-/*
-	Create new region object and add to regions vector
-*/
+//Create new region object and add to regions vector
 void MapLoader::addRegions(int rid, int rx, int ry, string rt, 
 	string ca, string lai, string ma, string lt, string ctw) {
 	
@@ -235,7 +230,6 @@ void MapLoader::addRegions(int rid, int rx, int ry, string rt,
 
 
 /*
-	Part 1.1 
 	Check whether the selected map file is a connected graph
 	If the selected maps is not a graph, reject it
 */
@@ -262,6 +256,33 @@ int MapLoader::getMapLength() {
 
 void MapLoader::modifyRegion(int index) {
 	regions.at(index).setImmuneRegion();
+}
+
+bool MapLoader::checkCanConquer(int rid, int pid) {
+	if (regions[rid].getPositionX() == 0
+		|| regions[rid].getPositionY() == 0
+		|| regions[rid].getPositionX() == mapLength
+		|| regions[rid].getPositionY() == mapWidth) {
+		return true;
+	}
+	else if (regions[rid].getImmuneRegion()) {
+		return false;
+	}
+	else {
+		for (size_t i = 0; i < regions.size(); i++) {
+			if (regions[i].getOwnerId() == pid && maps.findAdjencent(i, rid)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool MapLoader::checkBelongesTo(int rnum, int pid) {
+	if (regions[rnum].getOwnerId() == pid)
+		return true;
+	else
+		return false;
 }
 
 void MapLoader::printOnlySideRegion() {

@@ -17,6 +17,7 @@ class Player {
 protected:
 	int numOfPlayer;	//total number of players
 	int id;
+	bool isComputer;
 	string raceOwned;
 	string powerOwned;
 	int numOfTokenOwn;	//total token owned
@@ -27,7 +28,7 @@ protected:
 	int diceResult;
 	Races races;
 	PowerBudges powerbudges;
-	//MapLoader mpl;
+	//Strategy* strat = nullptr;
 
 public:
 	
@@ -35,25 +36,33 @@ public:
 	Player(int);
 	~Player();
 
+//	virtual void setStrategy(MapLoader&, int, vector<Player>&);
+
 	void pick_race(Races&, PowerBudges&, vector<Player>&);
 	void conquers(MapLoader&, int, vector<Player>&);
 	void redployment(MapLoader&, vector<Player>&);
 	void score(MapLoader&, vector<Player>&);
 	void chooseDecline(MapLoader&, vector<Player>&);
 
-	void minusCoins(int);
 	void addCoins(int);
-	void setNumOfToken(int);
+	void minusCoins(int);
+	void addNumOfToken(int);
+	void minusNumOfToken(int);
+	void resetNumOfToken();
+	void addRace(Races);
+	void addPower(PowerBudges);
+	void addJoinRegion(int);
 	int getCoins();
 	int getTokenNumber();
 	int getPlayerId();
-	//void setRegionSet(int);
+	bool getIsComputer();
+	//vector<Region> getOwnedRegion(int);
 	void shown();
 
 	list<int> ownedRegionSet;
+	vector<Region*> ownedRegion;
 	vector<Races> race;
 	vector<PowerBudges> powerbudge;
-	vector<Player> players;
 	
 };
 

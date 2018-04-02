@@ -2,8 +2,8 @@
 #define GAMEDRIVE_H
 
 #include "Player.h"
+#include "AI.h"
 #include "MapLoader.h"
-//#include "Map.h"
 
 #include <array>
 #include <string>
@@ -12,8 +12,9 @@ using namespace std;
 class GameDrive {
 private:
 	Player ply;
-	Player plys;
+	AI plyAI;
 	int numOfPlayer;
+	int numOfmap;
 	int numOfTurn; //number of turn is from 0 to 10
 	int numOfCombo;
 	bool playerNumCheck;
@@ -35,6 +36,9 @@ public:
 	string shufflePickPower(int);
 	void setRaceType(Races);
 	void setPowerType(PowerBudges);
+
+	vector<Player> players;
+	vector<AI> ai;
 
 };
 

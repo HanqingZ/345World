@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -27,6 +28,14 @@ void Map::addMapEdges(list<int> depar) {
 
 list<int> Map::findEdges(int rg) {
 	return maps[rg];
+}
+
+bool Map::findAdjencent(int rg, int rid) {
+	i = find(maps[rg].begin(), maps[rg].end(), rid);
+	if (i != maps[rg].end())
+		return true;
+	else
+		return false;
 }
 
 void Map::printEdges(int depart) {

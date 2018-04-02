@@ -20,7 +20,6 @@ class Region {
 	};*/
 protected:
 	int regionId;
-	//string regionName;
 	int posX;
 	int posY;
 	string regionType;
@@ -43,7 +42,6 @@ public:
 	~Region();
 
 	void setRegionId(int);
-	//void setRegionName(string);
 	//void setPositionX(int);
 	//void setPositionY(int);
 	//void setRetionType(string);
@@ -60,12 +58,12 @@ public:
 	void setContainEncampments(bool);
 
 	int getRegionId();
-	//string getRegionName();
 	int getPositionX();
 	int getPositionY();
 	string getRegionType() { return regionType; };
 	int getOwnerId();
 	int getContainToken();
+	int getUsefulContainToken();
 	bool getIsCavern();
 	bool getIsLairs();
 	bool getIsLostTribes();

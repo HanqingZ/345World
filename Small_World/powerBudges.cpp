@@ -94,7 +94,7 @@ Alchemist::Alchemist() {
 	this->active = true;
 }
 
-void Alchemist::setVictoryCoins(int cn) {
+void Alchemist::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += 2;
 }
 
@@ -148,7 +148,7 @@ Forest::Forest() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Forest::setVictoryCoins(int cn) {
+void Forest::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += cn;
 }
 
@@ -158,7 +158,7 @@ Fortified::Fortified() {
 	this->numOfToken = 3;
 	this->active = true;
 }
-void Fortified::setVictoryCoins(int cn) {
+void Fortified::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += cn;
 }
 
@@ -176,7 +176,7 @@ Hill::Hill() {
 	this->numOfToken = 4;
 	this->active = true;
 }
-void Hill::setVictoryCoins(int cn) {
+void Hill::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += cn;
 }
 
@@ -186,7 +186,7 @@ Merchant::Merchant() {
 	this->numOfToken = 2;
 	this->active = true;
 }
-void Merchant::setVictoryCoins(int cn) {
+void Merchant::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += cn;
 }
 
@@ -203,7 +203,7 @@ Pillaging::Pillaging() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Pillaging::setVictoryCoins(int cn) {
+void Pillaging::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += cn;
 }
 
@@ -234,7 +234,7 @@ Swamp::Swamp() {
 	this->numOfToken = 4;
 	this->active = true;
 }
-void Swamp::setVictoryCoins(int cn) {
+void Swamp::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += cn;
 }
 
@@ -251,7 +251,7 @@ Wealthy::Wealthy() {
 	this->numOfToken = 4;
 	this->active = true;
 }
-void Wealthy::setVictoryCoins(int cn) {
+void Wealthy::setVictoryCoins(int &cn) {
 	this->numOfVictoryCoin += 7;
 }
 

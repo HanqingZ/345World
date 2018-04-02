@@ -37,6 +37,8 @@ public:
 	int getMapWidth();
 	int getMapLength();
 	void modifyRegion(int);
+	bool checkCanConquer(int, int);
+	bool checkBelongesTo(int, int);
 
 	void printOnlySideRegion();
 	void printSurroungdingRegion(int);

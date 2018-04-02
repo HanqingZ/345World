@@ -62,20 +62,6 @@ void Region::setRegionId(int rid)
 	this->regionId = rid;
 }
 
-/*
-void Region::setPositionX(int px) {
-	this->posX = px;
-}
-
-void Region::setPositionY(int py) {
-	this->posY = py;
-}
-
-void Region::setRetionType(string rt) {
-	this->regionType = rt;
-}
-*/
-
 void Region::setImmuneRegion() {
 	this->immune = true;
 }
@@ -89,7 +75,12 @@ void Region::minusContainToken(int tk){
 }
 
 void Region::resetContainToken() {
-	this->containToken = 0;
+	if (regionType == "Mountain") {
+		this->containToken = 1;
+	}
+	else {
+		this->containToken = 0;
+	}
 }
 
 void Region::setOwnerID(int idply) {
@@ -130,6 +121,14 @@ int Region::getOwnerId() {
 
 int Region::getContainToken() {
 	return this->containToken;
+}
+
+int Region::getUsefulContainToken() {
+	if (getRegionType() == "Mountain") {
+		return containToken - 1;
+	}
+	else
+		return containToken;
 }
 
 bool Region::getIsCavern() {

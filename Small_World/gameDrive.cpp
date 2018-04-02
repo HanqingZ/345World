@@ -13,7 +13,6 @@
 
 using namespace std;
 
-
 vector<int> rv;
 vector<int> pv;
 
@@ -36,13 +35,21 @@ void GameDrive::start() {
 		cout << "Please enter a number between 2 and 5.\n" 
 			<< "How many people play this game? (2 to 5)\n";
 	}
+	
+	while (true) {
+		cout << "Which map you want to choose?(2 to 5)\n";
+		cin >> numOfmap;
+		if (numOfmap <= 5 && numOfmap >= 2 && numOfmap >= numOfPlayer)
+			break;
+		cout << "Please enter a number between 2 and 5.\n";
+	}
 
 	/*
 	** 	Load the selected map based on number of players
 	** 	All information about the maps has been printed
 	**	If the selected map is not a graph, system stop
 	*/
-	chooseMapType(this->numOfPlayer);
+	chooseMapType(this->numOfmap);
 	while (!testMap.checkIfIsMap()) {
 		exit(0);
 	}
@@ -55,14 +62,20 @@ void GameDrive::start() {
 	numOfTurn++;
 	for (int i = 0; i < numOfPlayer; ++i) {
 		ply = Player(i + 1);
-		plys.players.push_back(ply);
+		players.push_back(ply);
+	}
+	if (numOfmap > numOfPlayer) {
+		for (int j = numOfPlayer; j < numOfmap; ++j) {
+			plyAI = AI(j + 1);
+			ai.push_back(plyAI);
+		}
 	}
 
-
+	//====================================================================================
 	//The game start!
 	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
-		for (auto j : plys.players) {
+		for (auto j : players) {
 			string ans;
 			cout << "Player #" << j.getPlayerId() << endl;
 
@@ -74,7 +87,7 @@ void GameDrive::start() {
 				string sl = shufflePickRace(rv[numOfCombo - 1]);
 				string s2 = shufflePickPower(pv[numOfCombo - 1]);
 
-				j.pick_race(r, pb, plys.players);
+				j.pick_race(r, pb, players);
 				rv.erase(rv.begin() + numOfCombo - 1);
 				pv.erase(pv.begin() + numOfCombo - 1);
 
@@ -91,20 +104,22 @@ void GameDrive::start() {
 					string sl = shufflePickRace(rv[numOfCombo - 1]);
 					string s2 = shufflePickPower(pv[numOfCombo - 1]);
 
-					j.pick_race(r, pb, plys.players);
+					j.pick_race(r, pb, players);
 					rv.erase(rv.begin() + numOfCombo - 1);
 					pv.erase(pv.begin() + numOfCombo - 1);
 
 					j.minusCoins(numOfCombo - 1);
 				}
 			}
-
-			j.conquers(testMap, numOfTurn, plys.players);
-			j.redployment(testMap, plys.players);
-			j.score(testMap, plys.players);
+			j.conquers(testMap, numOfTurn, players);
+			j.redployment(testMap, players);
+			j.score(testMap, players);
+			for (auto a : ai) {
+				AI* c = &a;
+				a.strat->execute(testMap, c);
+			}
 		}
 	}
-
 	cout << "Thank you for enjoy this game.\n";
 }
 
@@ -173,9 +188,7 @@ void GameDrive::charaCombo() {
 	}
 }
 
-/*
-** 	Part 2.2 Index for race banners
-*/
+//Index for race banners
 string GameDrive::shufflePickRace(int num) {
 	switch (num) {
 	case 0: 
@@ -240,9 +253,7 @@ string GameDrive::shufflePickRace(int num) {
 	}
 }
 
-/*
-** 	Part 2.3 Index for special power badges
-*/
+// Index for special power badges
 string GameDrive::shufflePickPower(int num) {
 
 	switch (num) {

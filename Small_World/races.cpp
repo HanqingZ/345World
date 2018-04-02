@@ -81,7 +81,7 @@ Dwarve::Dwarve() {
 	this->active = true;
 	this->raceName = "Dwarve";
 }
-void Dwarve::setVictoryCoins(int cn) {
+void Dwarve::setVictoryCoins(int& cn) {
 	cn += 1;
 }
 
@@ -119,7 +119,7 @@ Human::Human() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Human::setVictoryCoins(int cn) {
+void Human::setVictoryCoins(int& cn) {
 	cn += 1;
 }
 
@@ -129,7 +129,7 @@ Orcs::Orcs() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Orcs::setVictoryCoins(int cn) {
+void Orcs::setVictoryCoins(int& cn) {
 	cn += 1;
 }
 
@@ -174,6 +174,6 @@ Wizard::Wizard() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Wizard::setVictoryCoins(int cn) {
+void Wizard::setVictoryCoins(int& cn) {
 	cn += 1;
 }

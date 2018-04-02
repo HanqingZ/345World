@@ -110,25 +110,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Aggresive.cpp" />
+    <ClCompile Include="AI.cpp" />
+    <ClCompile Include="Defensive.cpp" />
     <ClCompile Include="gameDrive.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="dice.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mapLoader.cpp" />
+    <ClCompile Include="Moderate.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="races.cpp" />
     <ClCompile Include="powerBudges.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="region.cpp" />
+    <ClCompile Include="strategy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Aggressive.h" />
+    <ClInclude Include="AI.h" />
+    <ClInclude Include="Defensive.h" />
     <ClInclude Include="Dice.h" />
     <ClInclude Include="GameDrive.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
+    <ClInclude Include="Moderate.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Races.h" />
     <ClInclude Include="PowerBudges.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Region.h" />
+    <ClInclude Include="Strategy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="failedMap.map" />

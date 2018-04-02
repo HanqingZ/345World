@@ -25,6 +25,7 @@ public:
 	//void addEdges(int);
 	void addMapEdges(list<int>);
 	list<int> findEdges(int);
+	bool findAdjencent(int, int);
 	void printEdges(int);
 	
 	vector<list<int>> maps;
