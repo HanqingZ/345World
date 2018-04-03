@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "AI.h"
 #include "MapLoader.h"
-
+#include "PhaseObserver.h"
 #include <array>
 #include <string>
 using namespace std;

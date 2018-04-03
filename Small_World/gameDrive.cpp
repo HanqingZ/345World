@@ -73,14 +73,24 @@ void GameDrive::start() {
 
 	//====================================================================================
 	//The game start!
+
 	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
+		
 		for (auto j : players) {
+			Player *p = &j;
+			PhaseObserver *o = new PhaseObserver();
+			j.Attach(o);
+			j.setPlayerTurn(numOfTurn);
+		//	j.Notify(p);
+	
 			string ans;
+			j.setStep("pick");
 			cout << "Player #" << j.getPlayerId() << endl;
 
 			if (numOfTurn == 1) {
 				charaCombo();
+				j.Notify(p);
 				cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
 				cin >> numOfCombo;
 
@@ -111,13 +121,20 @@ void GameDrive::start() {
 					j.minusCoins(numOfCombo - 1);
 				}
 			}
+			j.setStep("conquer");
+			j.Notify(p);
 			j.conquers(testMap, numOfTurn, players);
+			j.setStep("reDeploy");
+			j.Notify(p);
 			j.redployment(testMap, players);
+			j.setStep("score");
+			j.Notify(p);
 			j.score(testMap, players);
 			for (auto a : ai) {
 				AI* c = &a;
 				a.strat->execute(testMap, c);
 			}
+
 		}
 	}
 	cout << "Thank you for enjoy this game.\n";

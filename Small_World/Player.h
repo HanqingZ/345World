@@ -5,14 +5,14 @@
 #include "Races.h"
 #include "PowerBudges.h"
 #include "MapLoader.h"
-
+#include "Subject.h"
 #include <vector>
 #include <string>
 #include <list>
 
 using namespace std;
 
-class Player {
+class Player : public Subject {
 
 protected:
 	int numOfPlayer;	//total number of players
@@ -29,7 +29,8 @@ protected:
 	Races races;
 	PowerBudges powerbudges;
 	//Strategy* strat = nullptr;
-
+	int playerTurn;
+	string step;
 public:
 	
 	Player();
@@ -49,12 +50,16 @@ public:
 	void addNumOfToken(int);
 	void minusNumOfToken(int);
 	void resetNumOfToken();
+	void setStep(string s) { this->step = s; }
+	void setPlayerTurn(int turn) { this->playerTurn = turn; }
 	void addRace(Races);
 	void addPower(PowerBudges);
 	void addJoinRegion(int);
 	int getCoins();
 	int getTokenNumber();
 	int getPlayerId();
+	int getPlayerTurn() { return playerTurn; }
+	string getStep() { return step;}
 	bool getIsComputer();
 	//vector<Region> getOwnedRegion(int);
 	void shown();

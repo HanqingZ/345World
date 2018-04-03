@@ -64,6 +64,7 @@ void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
 
 //Conquers some regions and Run once per Player in each turn
 void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &player) {
+	playerTurn = numberOfTurn;
 	int numOfToken;
 	bool question = true;
 	cout << "You are Player #" << id << endl;
