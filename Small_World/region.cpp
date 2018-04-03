@@ -74,12 +74,22 @@ void Region::minusContainToken(int tk){
 	this->containToken -= tk;
 }
 
-void Region::resetContainToken() {
-	if (regionType == "Mountain") {
-		this->containToken = 1;
+void Region::resetContainToken(bool real) {
+	if (real) {
+		if (regionType == "Mountain") {
+			this->containToken = 1;
+		}
+		else {
+			this->containToken = 0;
+		}
 	}
 	else {
-		this->containToken = 0;
+		if (regionType == "Mountain") {
+			this->containToken = 2;
+		}
+		else {
+			this->containToken = 1;
+		}
 	}
 }
 

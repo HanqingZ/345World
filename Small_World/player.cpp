@@ -70,7 +70,7 @@ void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &pla
 
 	while (question) {
 		// First turn Conquer or decline previous race
-		if (player[id].ownedRegionSet.empty()) {
+		if (player[id].ownedRegionSet.empty() || !player[id].race[0].getActiveCondition()) {
 			mploader.printOnlySideRegion();
 		}
 		else {
@@ -82,6 +82,7 @@ void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &pla
 			cin >> regionId;
 
 			mploader.printSurroungdingRegion(regionId);
+			cout << endl;
 		}
 
 		cout << "Please enter the region number you want to conquer." << endl;
@@ -94,51 +95,57 @@ void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &pla
 			<< "(should place two tokens bigger to get this regions)" << endl;
 		cin >> numOfToken;
 
+		localToken += 2;
+
 		//Final Conquest/Reinforcement Die Roll
-		if ((mploader.regions[regionId].getContainToken() + 2) > numOfToken) {
+		if (localToken > numOfToken && numOfTokenOwn <= 1) {
 			cout << "You have less tokens on hand." << endl;
 			cout << "You can row the dice." << endl;
 			int i = d.rollingResult();
-			cout << "You got " << i << endl;
-			numOfToken += i;
-			
+			//cout << "You got " << i << endl;
+			//numOfToken += i;
+
 			question = false;
-		}
-		else if ((mploader.regions[regionId].getContainToken() + 2) <= numOfToken) {
-			this->numOfTokenOwn -= numOfToken;
-			//Check whether this region has been conquered
-			if (mploader.regions[regionId].getOwnerId() != 100) {
-				int k = mploader.regions[regionId].getOwnerId();
-				player[k].ownedRegionSet.remove(regionId);
-				if (mploader.regions[regionId].getRegionType() == "Mountain") {
-					mploader.regions[regionId].minusContainToken(localToken - 1);
-				}
-				else {
-					mploader.regions[regionId].minusContainToken(localToken);
-				}
+			if (numOfToken + i < localToken) {
+				break;
 			}
-			mploader.regions[regionId].setOwnerID(id);
-			if (mploader.regions[regionId].getIsLostTribes()) {
-				mploader.regions[regionId].minusContainToken(1);
-				mploader.regions[regionId].setIsLostTribes(false);
-			}
-			mploader.regions[regionId].addContainToken(numOfToken);
-			player[id].addJoinRegion(regionId);
-			cout << "Success Conquer! \n";
 		}
+		this->numOfTokenOwn -= numOfToken;
+		//Check whether this region has been conquered
+		if (mploader.regions[regionId].getOwnerId() != 100) {
+			int k = mploader.regions[regionId].getOwnerId();
+			player[k].ownedRegionSet.remove(regionId);
+			if (mploader.regions[regionId].getRegionType() == "Mountain") {
+				mploader.regions[regionId].minusContainToken(localToken - 1);
+			}
+			else {
+				mploader.regions[regionId].minusContainToken(localToken);
+			}
+		}
+		mploader.regions[regionId].setOwnerID(id);
+		if (mploader.regions[regionId].getIsLostTribes()) {
+			mploader.regions[regionId].minusContainToken(1);
+			mploader.regions[regionId].setIsLostTribes(false);
+		}
+		mploader.regions[regionId].addContainToken(numOfToken);
+		player[id].addJoinRegion(regionId);
+		cout << "Success Conquer! \n";
 	}
 }
 
 //Redeployment
 void Player::redployment(MapLoader &mploader, vector<Player>& player) {
 	int rid;
-	int regionToken = 0;
-	int regionToken2 = 10;
-	bool answer1 = true;
-	bool answer2 = true;
+	int regionToken2 = 20;
 	string l;
 
 	cout << "Now you can replace your tokens on the map." << endl;
+
+	//Take all tokens from the owned region, only leave one token
+	for (auto i : player[id].ownedRegionSet) {
+		numOfTokenOwn += mploader.regions[i].getUsefulContainToken();
+		mploader.regions[i].resetContainToken(false);
+	}
 
 	cout << "Player " << id << " owns the regions "  << endl;
 	for (auto i : player[id].ownedRegionSet) {
@@ -146,53 +153,38 @@ void Player::redployment(MapLoader &mploader, vector<Player>& player) {
 	}
 	cout << endl;
 
-	while (answer1) {
-		cout << "Please enter the Region ID number that you want to remove tokens from: \n";
-		cin >> rid;
-
-		cout << "The region " << rid << " contains "
-			<< mploader.regions[rid].getContainToken() << " tokens." << endl;
-
-		while (regionToken < 1) {
-			cout << "Enter the tokens you want to remain on this region."
-				<< "(at least one token on the region)" << endl;
-			cin >> regionToken;
+	while (true) {
+		while (true) {
+			cout << "Please enter the Region ID number that you want to place tokens from: \n";
+			cin >> rid;
+			if (mploader.checkBelongesTo(rid, id)) {
+				break;
+			}
+			cout << "This region is not belong to you.\n";
 		}
-
-		mploader.regions[rid].minusContainToken(regionToken);
-		this->numOfTokenOwn += regionToken;
-
-		cout << "Do u still want to remove your tokens from the map? (y or n)";
-		cin >> l;
-
-		if (l != "y") {
-			answer1 = false;
-		}
-	}
-
-	while (answer2) {
-		cout << "Please enter the Region ID number that you want to place tokens from: \n";
-		cin >> rid;
-
 		cout << "The region " << rid << " contains "
 			<< mploader.regions[rid].getContainToken() << " tokens." << endl;
 
 		cout << "You owns " << numOfTokenOwn << " tokens on hand." << endl;
 
-		while (regionToken2 != 0 && regionToken2 > numOfTokenOwn) {
+		while (true) {
 			cout << "Enter the tokens you want to be placed on this region."
 				<< "(same or less than the tokens on your hand)" << endl;
 			cin >> regionToken2;
+			if (regionToken2 <= numOfTokenOwn) {
+				break;
+			}
+			cout << "Please re-enter the tokens you want to be placed on this region.\n";
 		}
 
-		mploader.regions[rid].addContainToken(regionToken);
-		this->numOfTokenOwn -= regionToken;
+		mploader.regions[rid].addContainToken(regionToken2);
+		this->numOfTokenOwn -= regionToken2;
 
 		cout << "Do u still want to add your tokens to the map? (y or n)";
 		cin >> l;
 
 		if (l != "y") {
-			answer2 = false;
+			break;
 		}
 	}
 }
@@ -276,13 +268,7 @@ bool Player::chooseDecline(MapLoader &mploader, int numOfTurn, vector<Player>& p
 		}
 
 		for (auto s : player[id].ownedRegionSet) {
-			if (mploader.regions[s].getRegionType() == "Mountain") {
-				mploader.regions[s].resetContainToken();
-				mploader.regions[s].addContainToken(1);
-			}
-			else {
-				mploader.regions[s].resetContainToken();
-			}
+			mploader.regions[s].resetContainToken(true);
 		}
 		numOfDecline++;
 		return true;
