@@ -22,7 +22,8 @@ protected:
 	string powerOwned;
 	int numOfTokenOwn;	//total token owned
 	int coinOwn;
-	
+	int numOfDecline = 0;
+
 	int regionId;
 	Dice d;
 	int diceResult;
@@ -43,7 +44,7 @@ public:
 	void conquers(MapLoader&, int, vector<Player>&);
 	void redployment(MapLoader&, vector<Player>&);
 	void score(MapLoader&, vector<Player>&);
-	void chooseDecline(MapLoader&, vector<Player>&);
+	bool chooseDecline(MapLoader&, int, vector<Player>&);
 
 	void addCoins(int);
 	void minusCoins(int);

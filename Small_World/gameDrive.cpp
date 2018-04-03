@@ -78,17 +78,15 @@ void GameDrive::start() {
 		cout << "Now is Turn #" << numOfTurn << endl;
 		
 		for (auto j : players) {
-			Player *p = &j;
+Player *p = &j;
 			PhaseObserver *o = new PhaseObserver();
 			j.Attach(o);
 			j.setPlayerTurn(numOfTurn);
-		//	j.Notify(p);
-	
-			string ans;
+			string ans, anss;
 			j.setStep("pick");
 			cout << "Player #" << j.getPlayerId() << endl;
 
-			if (numOfTurn == 1) {
+			if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
 				charaCombo();
 				j.Notify(p);
 				cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
@@ -102,40 +100,33 @@ void GameDrive::start() {
 				pv.erase(pv.begin() + numOfCombo - 1);
 
 				j.minusCoins(numOfCombo - 1);
+
+				j.conquers(testMap, numOfTurn, players);
+				j.redployment(testMap, players);
+				j.score(testMap, players);
 			}
 			else {
-				cout << "Do u want to pick a race and special power combo? (y or n)\n";
-				cin >> ans;
-				if (ans == "y") {
-					charaCombo();
-					cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
-					cin >> numOfCombo;
-
-					string sl = shufflePickRace(rv[numOfCombo - 1]);
-					string s2 = shufflePickPower(pv[numOfCombo - 1]);
-
-					j.pick_race(r, pb, players);
-					rv.erase(rv.begin() + numOfCombo - 1);
-					pv.erase(pv.begin() + numOfCombo - 1);
-
-					j.minusCoins(numOfCombo - 1);
+				cout << "Do u want to decline your current combo? (y or n)\n";
+				cin >> anss;
+				if (anss == "y") {
+					if (!j.chooseDecline(testMap, numOfTurn, players)) {
+						j.conquers(testMap, numOfTurn, players);
+						j.redployment(testMap, players);
+					}
 				}
+				else {
+					j.conquers(testMap, numOfTurn, players);
+					j.redployment(testMap, players);
+				}
+				j.score(testMap, players);
 			}
-			j.setStep("conquer");
-			j.Notify(p);
-			j.conquers(testMap, numOfTurn, players);
-			j.setStep("reDeploy");
-			j.Notify(p);
-			j.redployment(testMap, players);
-			j.setStep("score");
-			j.Notify(p);
-			j.score(testMap, players);
-			for (auto a : ai) {
-				AI* c = &a;
-				a.strat->execute(testMap, c);
-			}
-
 		}
+		//AI loop start
+		for (auto a : ai) {
+			AI* c = &a;
+			a.strat->execute(testMap, c);
+		}
+		//AI loop end
 	}
 	cout << "Thank you for enjoy this game.\n";
 }
@@ -147,19 +138,15 @@ void GameDrive::chooseMapType(int numOfPlayer) {
 	{
 	case 2:
 		this->testMap.mapReader("Map2.map");
-		//testMap.printAsImage();
 		break;
 	case 3:
 		this->testMap.mapReader("Map3.map");
-		//testMap.printAsImage();
 		break;
 	case 4:
 		this->testMap.mapReader("Map4.map");
-		//testMap.printAsImage();
 		break;
 	case 5:
 		this->testMap.mapReader("Map5.map");
-		//testMap.printAsImage();
 		break;
 	case 10:
 		this->testMap.mapReader("failedMap.map");
