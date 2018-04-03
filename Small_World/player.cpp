@@ -266,22 +266,30 @@ void Player::score(MapLoader &mploader, vector<Player>& player) {
 
 }
 
-void Player::chooseDecline(MapLoader &mploader, vector<Player>& player) {
-	for (auto r : race) {
-		r.setActiveCondition(false);
-	}
-	for (auto p : powerbudge) {
-		p.setActiveCondition(false);
-	}
+bool Player::chooseDecline(MapLoader &mploader, int numOfTurn, vector<Player>& player) {
+	if (numOfDecline == 0) {
+		for (auto r : race) {
+			r.setActiveCondition(false);
+		}
+		for (auto p : powerbudge) {
+			p.setActiveCondition(false);
+		}
 
-	for (auto s : player[id].ownedRegionSet) {
-		if (mploader.regions[s].getRegionType() == "Mountain") {
-			mploader.regions[s].resetContainToken();
-			mploader.regions[s].addContainToken(1);
+		for (auto s : player[id].ownedRegionSet) {
+			if (mploader.regions[s].getRegionType() == "Mountain") {
+				mploader.regions[s].resetContainToken();
+				mploader.regions[s].addContainToken(1);
+			}
+			else {
+				mploader.regions[s].resetContainToken();
+			}
 		}
-		else {
-			mploader.regions[s].resetContainToken();
-		}
+		numOfDecline++;
+		return true;
+	}
+	else {
+		cout << "You can't decline!\n";
+		return false;
 	}
 }
 

@@ -76,10 +76,10 @@ void GameDrive::start() {
 	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
 		for (auto j : players) {
-			string ans;
+			string ans, anss;
 			cout << "Player #" << j.getPlayerId() << endl;
 
-			if (numOfTurn == 1) {
+			if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
 				charaCombo();
 				cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
 				cin >> numOfCombo;
@@ -92,33 +92,33 @@ void GameDrive::start() {
 				pv.erase(pv.begin() + numOfCombo - 1);
 
 				j.minusCoins(numOfCombo - 1);
+
+				j.conquers(testMap, numOfTurn, players);
+				j.redployment(testMap, players);
+				j.score(testMap, players);
 			}
 			else {
-				cout << "Do u want to pick a race and special power combo? (y or n)\n";
-				cin >> ans;
-				if (ans == "y") {
-					charaCombo();
-					cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
-					cin >> numOfCombo;
-
-					string sl = shufflePickRace(rv[numOfCombo - 1]);
-					string s2 = shufflePickPower(pv[numOfCombo - 1]);
-
-					j.pick_race(r, pb, players);
-					rv.erase(rv.begin() + numOfCombo - 1);
-					pv.erase(pv.begin() + numOfCombo - 1);
-
-					j.minusCoins(numOfCombo - 1);
+				cout << "Do u want to decline your current combo? (y or n)\n";
+				cin >> anss;
+				if (anss == "y") {
+					if (!j.chooseDecline(testMap, numOfTurn, players)) {
+						j.conquers(testMap, numOfTurn, players);
+						j.redployment(testMap, players);
+					}
 				}
-			}
-			j.conquers(testMap, numOfTurn, players);
-			j.redployment(testMap, players);
-			j.score(testMap, players);
-			for (auto a : ai) {
-				AI* c = &a;
-				a.strat->execute(testMap, c);
+				else {
+					j.conquers(testMap, numOfTurn, players);
+					j.redployment(testMap, players);
+				}
+				j.score(testMap, players);
 			}
 		}
+		//AI loop start
+		for (auto a : ai) {
+			AI* c = &a;
+			a.strat->execute(testMap, c);
+		}
+		//AI loop end
 	}
 	cout << "Thank you for enjoy this game.\n";
 }
@@ -130,19 +130,15 @@ void GameDrive::chooseMapType(int numOfPlayer) {
 	{
 	case 2:
 		this->testMap.mapReader("Map2.map");
-		//testMap.printAsImage();
 		break;
 	case 3:
 		this->testMap.mapReader("Map3.map");
-		//testMap.printAsImage();
 		break;
 	case 4:
 		this->testMap.mapReader("Map4.map");
-		//testMap.printAsImage();
 		break;
 	case 5:
 		this->testMap.mapReader("Map5.map");
-		//testMap.printAsImage();
 		break;
 	case 10:
 		this->testMap.mapReader("failedMap.map");
