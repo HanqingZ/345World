@@ -78,7 +78,7 @@ void GameDrive::start() {
 		cout << "Now is Turn #" << numOfTurn << endl;
 		
 		for (auto j : players) {
-Player *p = &j;
+			Player *p = &j;
 			PhaseObserver *o = new PhaseObserver();
 			j.Attach(o);
 			j.setPlayerTurn(numOfTurn);
@@ -89,7 +89,7 @@ Player *p = &j;
 			if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
 				charaCombo();
 				j.Notify(p);
-				cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
+			//	cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
 				cin >> numOfCombo;
 
 				string sl = shufflePickRace(rv[numOfCombo - 1]);
@@ -100,9 +100,14 @@ Player *p = &j;
 				pv.erase(pv.begin() + numOfCombo - 1);
 
 				j.minusCoins(numOfCombo - 1);
-
+				j.setStep("conquer");
+				j.Notify(p);
 				j.conquers(testMap, numOfTurn, players);
+				j.setStep("reDeploy");
+				j.Notify(p);
 				j.redployment(testMap, players);
+				j.setStep("score");
+				j.Notify(p);
 				j.score(testMap, players);
 			}
 			else {

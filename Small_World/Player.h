@@ -66,7 +66,7 @@ public:
 	void shown();
 
 	list<int> ownedRegionSet;
-	vector<Region*> ownedRegion;
+	//vector<Region*> ownedRegion;
 	vector<Races> race;
 	vector<PowerBudges> powerbudge;
 	

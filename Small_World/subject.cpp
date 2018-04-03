@@ -44,6 +44,25 @@ void Subject::Notify()
 	}
 }
 
+void Subject::Notify(int numRegion, Player * p)
+{
+	for (size_t i = 0; i < observers.size(); i++) {
+		if (observers[i]->observerType == "Statistics observer") {
+			observers[i]->Update(numRegion, p);
+		}
+	}
+}
+
+//void Subject::Notify(MapLoader* m )
+//{
+//	for (size_t i = 0; i < observers.size(); i++)
+//	{
+//		if (observers[i]->observerType == "Statistics observer") {
+//			observers[i]->Update(m);
+//		 }
+//	}
+//}
+
 void Subject::Notify(Player* s)
 {
 	//cout << "Notify" << endl;

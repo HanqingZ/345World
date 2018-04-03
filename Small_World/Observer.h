@@ -14,7 +14,9 @@ public:
 
 	//Observer();			 
 	//virtual void Update() = 0;	 
-	virtual void Update(Player*) = 0;
+	virtual void Update(Player*) {};
+	//virtual void Update(MapLoader*) = 0;
+	virtual void Update(int numRegion, Player * p) {};
 };
 
 #endif

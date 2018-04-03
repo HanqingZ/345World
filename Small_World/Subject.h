@@ -4,6 +4,8 @@
 #include <list>
 #include <vector>
 #include "Observer.h"
+#include "MapLoader.h"
+
 //#include "Player.h"
 using namespace std;
 
@@ -18,7 +20,8 @@ public:
 	virtual void Attach(Observer*);		//Attaches an observer to an observable object.	
 	virtual void Detach(Observer*);		//Detaches an observer from an observable object.	
 	virtual void Notify();				 
-	//virtual void Notify(Subject*);		 
+	virtual void Notify(int numRegion, Player* p);
+	//void Subject::Notify(MapLoader* m)
 	virtual void Notify(Player*);
 };
 

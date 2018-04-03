@@ -22,7 +22,7 @@ void PhaseObserver::Update(Player* player)
 	int playerId = player->getPlayerId();
 
 	if (step == "pick") {
-		cout << "Turn->"<< turn <<" Player " << playerId << ": Please pick your race and power combo." << endl;
+		cout << "Turn->"<< turn <<" Player " << playerId << ": Please pick your race and power combo (1 to 6)." << endl;
 	}
 	else if (step == "conquer") {
 		cout << "Turn->" << turn << " Player " << playerId << ": Please conquer some regions." << endl;
@@ -37,3 +37,4 @@ void PhaseObserver::Update(Player* player)
 
 	}
 }
+
