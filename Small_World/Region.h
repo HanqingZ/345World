@@ -49,7 +49,7 @@ public:
 	//void setRegionOwner(Player*);
 	void addContainToken(int);
 	void minusContainToken(int);
-	void resetContainToken();
+	void resetContainToken(bool);
 	void setImmuneRegion();
 	void setOwnerID(int);
 	void setIsLostTribes(bool);
