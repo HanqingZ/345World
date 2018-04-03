@@ -14,6 +14,7 @@ Player::Player() {
 	this->isComputer = false;
 	this->coinOwn = 5;
 	this->numOfTokenOwn = 0;
+	this->strategyType = "";
 	this->race.clear();
 	this->powerbudge.clear();
 	this->ownedRegionSet.clear();
@@ -24,6 +25,7 @@ Player::Player(int userId) {
 	this->isComputer = false;
 	this->coinOwn = 5;
 	this->numOfTokenOwn = 0;
+	this->strategyType = "";
 	this->race.clear();
 	this->powerbudge.clear();
 	this->ownedRegionSet.clear();

@@ -3,20 +3,17 @@
 
 #include "Player.h"
 #include "Strategy.h"
+#include "StrategyMethod.h"
 #include <vector>
 #include <string>
 #include <iostream>
-#include "Aggressive.h"
-#include "Defensive.h"
-#include "Moderate.h"
-#include "Random.h"
 using namespace std;
 
 class AI : public Player {
 public:
 	AI();
 	AI(int);
-	//~AI();
+	AI(int, string);
 	//void setStrategy(MapLoader&, AI&);
 
 	Strategy* strat;

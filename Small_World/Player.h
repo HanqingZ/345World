@@ -22,6 +22,7 @@ protected:
 	string powerOwned;
 	int numOfTokenOwn;	//total token owned
 	int coinOwn;
+	string strategyType;
 	int numOfDecline = 0;
 
 	int regionId;
