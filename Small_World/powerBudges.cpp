@@ -37,8 +37,8 @@ int PowerBudges::getVictoryCoin() {
 	return numOfVictoryCoin;
 }
 
-void PowerBudges::setVictoryCoins(int vc) {
-	this->numOfVictoryCoin = vc;
+int PowerBudges::setVictoryCoins(int vc) {
+	return numOfVictoryCoin = vc;
 }
 
 int PowerBudges::getTokenNumber() {
@@ -94,8 +94,8 @@ Alchemist::Alchemist() {
 	this->active = true;
 }
 
-void Alchemist::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += 2;
+int Alchemist::setVictoryCoins(int cn) {
+	return cn += 2;
 }
 
 Berserk::Berserk() {
@@ -148,8 +148,8 @@ Forest::Forest() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Forest::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += cn;
+int Forest::setVictoryCoins(int cn) {
+	return numOfVictoryCoin += cn;
 }
 
 Fortified::Fortified() {
@@ -158,8 +158,8 @@ Fortified::Fortified() {
 	this->numOfToken = 3;
 	this->active = true;
 }
-void Fortified::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += cn;
+int Fortified::setVictoryCoins(int cn) {
+	return numOfVictoryCoin += cn;
 }
 
 Heroic::Heroic() {
@@ -176,8 +176,8 @@ Hill::Hill() {
 	this->numOfToken = 4;
 	this->active = true;
 }
-void Hill::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += cn;
+int Hill::setVictoryCoins(int cn) {
+	return numOfVictoryCoin += cn;
 }
 
 Merchant::Merchant() {
@@ -186,8 +186,8 @@ Merchant::Merchant() {
 	this->numOfToken = 2;
 	this->active = true;
 }
-void Merchant::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += cn;
+int Merchant::setVictoryCoins(int cn) {
+	return numOfVictoryCoin += cn;
 }
 
 Mounted::Mounted() {
@@ -203,8 +203,8 @@ Pillaging::Pillaging() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Pillaging::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += cn;
+int Pillaging::setVictoryCoins(int cn) {
+	return numOfVictoryCoin += cn;
 }
 
 Seafaring::Seafaring() {
@@ -234,8 +234,8 @@ Swamp::Swamp() {
 	this->numOfToken = 4;
 	this->active = true;
 }
-void Swamp::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += cn;
+int Swamp::setVictoryCoins(int cn) {
+	return numOfVictoryCoin += cn;
 }
 
 Underworld::Underworld() {
@@ -251,8 +251,8 @@ Wealthy::Wealthy() {
 	this->numOfToken = 4;
 	this->active = true;
 }
-void Wealthy::setVictoryCoins(int &cn) {
-	this->numOfVictoryCoin += 7;
+int Wealthy::setVictoryCoins(int cn) {
+	return cn += 7;
 }
 
 

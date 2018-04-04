@@ -41,8 +41,8 @@ int Races::getVictoryCoin() {
 	return numOfVictoryCoin;
 }
 
-void Races::setVictoryCoins(int vc) {
-	this->numOfVictoryCoin = vc;
+int Races::setVictoryCoins(int vc) {
+	return this->numOfVictoryCoin = vc;
 }
 
 int Races::getTokenNumber() {
@@ -70,10 +70,6 @@ Amazon::Amazon() {
 	this->active = true;
 	this->raceName = "Amazon";
 }
-/*int Amazon::atConquer() {
-	return this->numOfToken += 4;
-}
-*/
 
 Dwarve::Dwarve() {
 	this->raceId = 1;
@@ -81,8 +77,8 @@ Dwarve::Dwarve() {
 	this->active = true;
 	this->raceName = "Dwarve";
 }
-void Dwarve::setVictoryCoins(int& cn) {
-	cn += 1;
+int Dwarve::setVictoryCoins(int cn) {
+	return cn += 1;
 }
 
 Elve::Elve() {
@@ -119,8 +115,8 @@ Human::Human() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Human::setVictoryCoins(int& cn) {
-	cn += 1;
+int Human::setVictoryCoins(int cn) {
+	return cn += 1;
 }
 
 Orcs::Orcs() {
@@ -129,8 +125,8 @@ Orcs::Orcs() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Orcs::setVictoryCoins(int& cn) {
-	cn += 1;
+int Orcs::setVictoryCoins(int cn) {
+	return cn += 1;
 }
 
 Ratman::Ratman() {
@@ -174,6 +170,6 @@ Wizard::Wizard() {
 	this->numOfToken = 5;
 	this->active = true;
 }
-void Wizard::setVictoryCoins(int& cn) {
-	cn += 1;
+int Wizard::setVictoryCoins(int cn) {
+	return cn += 1;
 }

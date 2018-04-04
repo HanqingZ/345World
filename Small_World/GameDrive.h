@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "AI.h"
 #include "MapLoader.h"
+#include "Strategy.h"
+#include "StrategyMethod.h"
 #include "PhaseObserver.h"
 #include "ObserverDecorator.h"
 #include "VictoryCoinObserverDecorator.h"
@@ -29,6 +31,8 @@ private:
 	MapLoader testMap;
 	PhaseObserver *po;
 	StatisticsObserver *so;
+	Strategy* strat;
+
 public:
 	GameDrive();
 	~GameDrive();
@@ -47,7 +51,7 @@ public:
 	void addVictoryCoinObserver(int victoryCoinOAnwser, vector<Player> players);
 	void addTokenObserverDecorator(int tokenOanwser, vector<Player> players);
 	vector<Player> players;
-	vector<AI> ai;
+	//vector<AI> ai;
 
 };
 

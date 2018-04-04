@@ -25,7 +25,7 @@ public:
 	string getRaceName();
 	void setRaceName(string);
 	int getVictoryCoin();
-	virtual void setVictoryCoins(int);
+	virtual int setVictoryCoins(int);
 	int getTokenNumber();
 	void setTokenNumber(int);
 	bool getActiveCondition();
@@ -46,7 +46,7 @@ public:
 class Dwarve : public Races {
 public:
 	Dwarve();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 	
 class Elve : public Races{
@@ -72,13 +72,13 @@ public:
 class Human : public Races {
 public:
 	Human();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Orcs : public Races {
 public:
 	Orcs();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Ratman : public Races {
@@ -109,7 +109,7 @@ public:
 class Wizard : public Races {
 public:
 	Wizard();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 #endif
