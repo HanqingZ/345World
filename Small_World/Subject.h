@@ -23,6 +23,7 @@ public:
 	virtual void Notify(int numRegion, Player* p);
 	//void Subject::Notify(MapLoader* m)
 	virtual void Notify(Player*);
+	virtual void NotifyAll(int numRegion, vector<Player>& players);
 };
 
 #endif

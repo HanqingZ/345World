@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Races.h"
 #include "PowerBudges.h"
+#include "TokenObserverDecorator.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -73,14 +74,25 @@ void GameDrive::start() {
 
 	//====================================================================================
 	//The game start!
-
+	int answer =1;
 	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
-		
+		//
+		if (answer == 1) {
+			cout << "Do you want to add decorator Observer (o for no and 1 for yes)?" << endl;
+
+			cin >> answer;
+			if (answer == 1) {
+				addObserver(players);
+			}
+		}
+		//
 		for (auto j : players) {
 			Player *p = &j;
-			PhaseObserver *o = new PhaseObserver();
-			j.Attach(o);
+			po = new PhaseObserver();
+			so = new StatisticsObserver();
+			j.Attach(po);
+			j.Attach(so);
 			j.setPlayerTurn(numOfTurn);
 			string ans, anss;
 			j.setStep("pick");
@@ -109,6 +121,8 @@ void GameDrive::start() {
 				j.setStep("score");
 				j.Notify(p);
 				j.score(testMap, players);
+				j.Detach(po);
+				j.Detach(so);
 			}
 			else {
 				cout << "Do u want to decline your current combo? (y or n)\n";
@@ -161,7 +175,32 @@ void GameDrive::chooseMapType(int numOfPlayer) {
 		break;
 	}
 }
-
+void GameDrive::addVictoryCoinObserver(int victoryCoinOAnwser, vector<Player> players) {
+	Observer *victoryCoinObserver = new VictoryCoinObserverDecorator(PhaseObserver());
+	for (auto p : players) {
+		p.Attach(victoryCoinObserver);
+	}
+}
+void GameDrive::addTokenObserverDecorator(int tokenOanwser, vector<Player> players) {
+	Observer *tokenObserverDecorator = new TokenObserverDecorator(PhaseObserver());
+	for (auto p : players) {
+		p.Attach(tokenObserverDecorator);
+	}
+}
+void GameDrive::addObserver(vector<Player> players) {
+	cout << "Do you want to add tokenObserver (o for no and 1 for yes)?" << endl;
+	int tokenOanwser;
+	cin >> tokenOanwser;
+	if (tokenOanwser == 1) {
+		addTokenObserverDecorator(tokenOanwser, players);
+	}
+	cout << "Do you want to add victoryCoinObserver (o for no and 1 for yes)?" << endl;
+	int victoryCoinOAnwser;
+	cin >> victoryCoinOAnwser;
+	if (victoryCoinOAnwser == 1) {
+		addVictoryCoinObserver(tokenOanwser, players);
+	}
+}
 
 int myrandom(int i) {
 	return std::rand() % i;

@@ -15,8 +15,8 @@ public:
 		this->decoratedObserver = decoratedObserver;
 	}
 	//virtual void Update(Subject* s) = 0;
-	virtual void Update(Player* p) = 0;
-	virtual void Update(int numRegion, Player * p) = 0;
+	virtual void Update(Player* p) {};
+	virtual void Update(int numRegion, Player * p) {};
 };
 
 #endif

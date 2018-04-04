@@ -23,7 +23,7 @@ protected:
 	int numOfTokenOwn;	//total token owned
 	int coinOwn;
 	int numOfDecline = 0;
-
+	
 	int regionId;
 	Dice d;
 	int diceResult;
@@ -32,6 +32,9 @@ protected:
 	//Strategy* strat = nullptr;
 	int playerTurn;
 	string step;
+	int regionTotalNum;
+	list<int>::iterator i;
+	int playerRegionSize=0;
 public:
 	
 	Player();
@@ -45,7 +48,9 @@ public:
 	void redployment(MapLoader&, vector<Player>&);
 	void score(MapLoader&, vector<Player>&);
 	bool chooseDecline(MapLoader&, int, vector<Player>&);
-
+	void setRegionTotalNum(int regionTotalNum) {
+		this->regionTotalNum = regionTotalNum;
+	}
 	void addCoins(int);
 	void minusCoins(int);
 	void addNumOfToken(int);
@@ -55,21 +60,26 @@ public:
 	void setPlayerTurn(int turn) { this->playerTurn = turn; }
 	void addRace(Races);
 	void addPower(PowerBudges);
-	void addJoinRegion(int);
+	void addJoinRegion(int rg, vector<Player>& players , int playerID);
 	int getCoins();
 	int getTokenNumber();
 	int getPlayerId();
 	int getPlayerTurn() { return playerTurn; }
 	string getStep() { return step;}
 	bool getIsComputer();
-	//vector<Region> getOwnedRegion(int);
+	vector<Races> getRaceVector() {
+		return this->race;
+	}
+	void minusRegion(int rg, vector<Player>& players, int playerID);
 	void shown();
-
+	int getPlayerRegionSize();
+	void setPlayerRegionSize(int playerRegionSize);
 	list<int> ownedRegionSet;
 	//vector<Region*> ownedRegion;
 	vector<Races> race;
 	vector<PowerBudges> powerbudge;
-	
+	list<int> GetList();
+
 };
 
 #endif
