@@ -22,6 +22,7 @@ protected:
 	string powerOwned;
 	int numOfTokenOwn;	//total token owned
 	int coinOwn;
+	string strategyType;
 	int numOfDecline = 0;
 	
 	int regionId;
@@ -53,6 +54,7 @@ public:
 	}
 	void addCoins(int);
 	void minusCoins(int);
+	void setCoins(int);
 	void addNumOfToken(int);
 	void minusNumOfToken(int);
 	void resetNumOfToken();
@@ -71,6 +73,7 @@ public:
 		return this->race;
 	}
 	void minusRegion(int rg, vector<Player>& players, int playerID);
+	string getStrategyName();
 	void shown();
 	int getPlayerRegionSize();
 	void setPlayerRegionSize(int playerRegionSize);

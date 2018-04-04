@@ -14,6 +14,7 @@ Player::Player() {
 	this->isComputer = false;
 	this->coinOwn = 5;
 	this->numOfTokenOwn = 0;
+	this->strategyType = "";
 	this->race.clear();
 	this->powerbudge.clear();
 	this->ownedRegionSet.clear();
@@ -24,6 +25,7 @@ Player::Player(int userId) {
 	this->isComputer = false;
 	this->coinOwn = 5;
 	this->numOfTokenOwn = 0;
+	this->strategyType = "";
 	this->race.clear();
 	this->powerbudge.clear();
 	this->ownedRegionSet.clear();
@@ -32,12 +34,6 @@ Player::Player(int userId) {
 Player::~Player() {
 
 }
-
-/*
-void Player::setStrategy(MapLoader &mploader, int numberOfTurn, vector<Player> &player) {
-	cout << "You don't have strategy to choose.\n";
-}
-*/
 
 /*
 **	Player pick a Race and Super Power Combo
@@ -70,7 +66,6 @@ void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
 void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &player, int answer) {
 	
 	this->setRegionTotalNum(mploader.regions.size());
-//	playerTurn = numberOfTurn;
 	int numOfToken; //input
 	bool question = true;
 	bool check = false;
@@ -163,7 +158,10 @@ void Player::redployment(MapLoader &mploader, vector<Player>& player) {
 
 	//Take all tokens from the owned region, only leave one token
 	for (auto i : player[id-1].ownedRegionSet) {
-		numOfTokenOwn += mploader.regions[i].getUsefulContainToken();
+//numOfTokenOwn += mploader.regions[i].getUsefulContainToken();
+
+		this->numOfTokenOwn += mploader.regions[i].getUsefulContainToken();
+		cout << "You got " << numOfTokenOwn << endl;
 		mploader.regions[i].resetContainToken(false);
 	}
 
@@ -210,7 +208,7 @@ void Player::redployment(MapLoader &mploader, vector<Player>& player) {
 }
 
 //Scoring Victory Coins
-void Player::score(MapLoader &mploader, vector<Player>& player,int victoryCoinOAnwser) {
+void Player::score(MapLoader &mploader, vector<Player>& player) {
 	int forest = 0; 
 	int farm = 0;
 	int hill = 0;
@@ -223,18 +221,18 @@ void Player::score(MapLoader &mploader, vector<Player>& player,int victoryCoinOA
 		for (auto s : player[id].ownedRegionSet) {
 			if (mploader.regions[s].getRegionType() == "Farmland"
 				&& (r.getRaceName() == "Human")) {
-				r.setVictoryCoins(this->coinOwn);
+				this->coinOwn = r.setVictoryCoins(this->coinOwn);
 			}
 			else if (mploader.regions[s].getIsMagic()
 				&& (r.getRaceName() == "Wizard")) {
-				r.setVictoryCoins(this->coinOwn);
+				this->coinOwn = r.setVictoryCoins(this->coinOwn);
 			}
 			else if (r.getRaceName() == "Orcs") {
-				r.setVictoryCoins(this->coinOwn);
+				this->coinOwn = r.setVictoryCoins(this->coinOwn);
 			}
 			else if (mploader.regions[s].getIsLairs()
 				&& (r.getRaceName() == "Dwarves")) {
-				r.setVictoryCoins(this->coinOwn);
+				this->coinOwn = r.setVictoryCoins(this->coinOwn);
 			}
 
 		}
@@ -243,32 +241,32 @@ void Player::score(MapLoader &mploader, vector<Player>& player,int victoryCoinOA
 		for (auto s : player[id].ownedRegionSet) {
 			if(mploader.regions[s].getContainFortresses()
 				&& p.getPowerName() == "Fortified"){
-				p.setVictoryCoins(this->coinOwn);
+				this->coinOwn = p.setVictoryCoins(this->coinOwn);
 			}
 			else if (mploader.regions[s].getRegionType() == "Hill"
 				&& p.getPowerName() == "Hill") {
-				p.setVictoryCoins(this->coinOwn);
+				this->coinOwn = p.setVictoryCoins(this->coinOwn);
 			}
 			else if (mploader.regions[s].getRegionType() == "Forest"
 				&& p.getPowerName() == "Forest") {
-				p.setVictoryCoins(this->coinOwn);
+				this->coinOwn = p.setVictoryCoins(this->coinOwn);
 			}
 			else if (mploader.regions[s].getRegionType() == "Swamp"
 				&& p.getPowerName() == "Swamp") {
-				p.setVictoryCoins(this->coinOwn);
+				this->coinOwn = p.setVictoryCoins(this->coinOwn);
 			}
 			else if (p.getPowerName() == "Merchant") {
-				p.setVictoryCoins(this->coinOwn);
+				this->coinOwn = p.setVictoryCoins(this->coinOwn);
 			}
 			else if (p.getPowerName() == "Pillaging") {
-				p.setVictoryCoins(this->coinOwn);
+				this->coinOwn = p.setVictoryCoins(this->coinOwn);
 			}
 		}
 		if (p.getPowerName() == "Alchemist") {
-			p.setVictoryCoins(this->coinOwn);
+			this->coinOwn = p.setVictoryCoins(this->coinOwn);
 		}
 		else if (p.getPowerName() == "Wealthy") {
-			p.setVictoryCoins(this->coinOwn);
+			this->coinOwn = p.setVictoryCoins(this->coinOwn);
 		}
 
 	}
@@ -289,7 +287,9 @@ bool Player::chooseDecline(MapLoader &mploader, int numOfTurn, vector<Player>& p
 			p.setActiveCondition(false);
 		}
 
-		for (auto s : player[id].ownedRegionSet) {
+		player[id - 1].resetNumOfToken();
+
+		for (auto s : player[id - 1].ownedRegionSet) {
 			mploader.regions[s].resetContainToken(true);
 		}
 		numOfDecline++;
@@ -309,6 +309,11 @@ void Player::minusCoins(int coins) {
 }
 
 void Player::addCoins(int coins) {
+	this->coinOwn += coins;
+	//Notify(this);
+}
+
+void Player::setCoins(int coins) {
 	this->coinOwn += coins;
 	//Notify(this);
 }
@@ -378,10 +383,9 @@ bool Player::getIsComputer() {
 	return this->isComputer;
 }
 
-
-//vector<Region> Player::getOwnedRegion(int) {
-
-//}
+string Player::getStrategyName() {
+	return this->strategyType;
+}
 
 
 void Player::shown() {
