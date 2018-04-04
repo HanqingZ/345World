@@ -36,12 +36,6 @@ Player::~Player() {
 }
 
 /*
-void Player::setStrategy(MapLoader &mploader, int numberOfTurn, vector<Player> &player) {
-	cout << "You don't have strategy to choose.\n";
-}
-*/
-
-/*
 **	Player pick a Race and Super Power Combo
 **	If player already have a combo, he/she should set previous to be decline
 **	Once per Player
@@ -72,7 +66,6 @@ void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
 void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &player) {
 	
 	this->setRegionTotalNum(mploader.regions.size());
-//	playerTurn = numberOfTurn;
 	int numOfToken; //input
 	bool question = true;
 	bool check = false;

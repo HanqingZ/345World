@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void Aggressive::execute(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Aggressive::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
 	if (!player->ownedRegionSet.empty()) {
 		//Take all tokens from the owned region, only leave one token
 		for (auto i : player->ownedRegionSet) {
@@ -141,7 +141,7 @@ void Aggressive::score(MapLoader& mploader, Player* player, vector<Player>&) {
 
 //================================================================================
 
-void Defensive::execute(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Defensive::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
 	string ans;
 	if (player->getTokenNumber() < 2) {
 		cout << "Do you want to abandon your regions? (y or n)\n";
@@ -345,39 +345,62 @@ void Defensive::score(MapLoader& mploader, Player* player, vector<Player>& ply) 
 
 //================================================================================
 
-void Moderate::execute(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Moderate::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
 	int numOfDecline = 0;
 	string ans, ans2;
 
-	if (numOfDecline == 0) {
+	if (numOfDecline == 0 || numOfTurn != 0) {
 		cout << "Do you want to decline? (y or n)\n" << endl;
 		cin >> ans;
 		if (ans == "y") {
 			chooseDecline(mploader, player, ply);
 			numOfDecline++;
 		}
-	}
+		else {
+			if (player->getTokenNumber() < 2) {
+				cout << "Do you want to abandon your regions? (y or n)\n";
+				cin >> ans2;
+				if (ans2 == "y") {
+					abandon(mploader, player, ply);
+				}
+			}
 
-	if (player->getTokenNumber() < 2) {
-		cout << "Do you want to abandon your regions? (y or n)\n";
-		cin >> ans2;
-		if (ans2 == "y") {
-			abandon(mploader, player, ply);
+			if (!player->ownedRegionSet.empty()) {
+				//Take all tokens from the owned region, only leave one token
+				for (auto i : player->ownedRegionSet) {
+					player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
+					cout << "You got " << player->getTokenNumber() << endl;
+					mploader.regions[i].resetContainToken(false);
+				}
+			}
+
+			conquers(mploader, player, ply);
+			redeployment(mploader, player, ply);
+			score(mploader, player, ply);
 		}
 	}
-
-	if (!player->ownedRegionSet.empty()) {
-		//Take all tokens from the owned region, only leave one token
-		for (auto i : player->ownedRegionSet) {
-			player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
-			cout << "You got " << player->getTokenNumber() << endl;
-			mploader.regions[i].resetContainToken(false);
+	else {
+		if (player->getTokenNumber() < 2) {
+			cout << "Do you want to abandon your regions? (y or n)\n";
+			cin >> ans2;
+			if (ans2 == "y") {
+				abandon(mploader, player, ply);
+			}
 		}
+
+		if (!player->ownedRegionSet.empty()) {
+			//Take all tokens from the owned region, only leave one token
+			for (auto i : player->ownedRegionSet) {
+				player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
+				cout << "You got " << player->getTokenNumber() << endl;
+				mploader.regions[i].resetContainToken(false);
+			}
+		}
+
+		conquers(mploader, player, ply);
+		redeployment(mploader, player, ply);
+		score(mploader, player, ply);
 	}
-	
-	conquers(mploader, player, ply);
-	redeployment(mploader, player, ply);
-	score(mploader, player, ply);
 }
 
 void Moderate::chooseDecline(MapLoader& mploader, Player* player, vector<Player>& ply) {
@@ -577,30 +600,42 @@ void Moderate::score(MapLoader& mploader, Player* player, vector<Player>& ply) {
 
 //================================================================================
 
-void Random::execute(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Random::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
 	int s;
 	string ans;
 
-	if (numOfDecline == 0) {
+	if (numOfDecline == 0 || numOfTurn != 1) {
 		srand((unsigned)time(0));
 		s = rand() % 2;
 		if (s == 0) {
 			chooseDecline(mploader, player, ply);
 			numOfDecline = 1;
 		}
-	}
-
-	if (player->getTokenNumber() < 2) {
-		cout << "Do you want to abandon your regions? (y or n)\n";
-		cin >> ans;
-		if (ans == "y") {
-			abandon(mploader, player, ply);
+		else {
+			if (player->getTokenNumber() < 2) {
+				cout << "Do you want to abandon your regions? (y or n)\n";
+				cin >> ans;
+				if (ans == "y") {
+					abandon(mploader, player, ply);
+				}
+			}
+			conquers(mploader, player, ply);
+			redeployment(mploader, player, ply);
+			score(mploader, player, ply);
 		}
 	}
-
-	conquers(mploader, player, ply);
-	redeployment(mploader, player, ply);
-	score(mploader, player, ply);
+	else {
+		if (player->getTokenNumber() < 2) {
+			cout << "Do you want to abandon your regions? (y or n)\n";
+			cin >> ans;
+			if (ans == "y") {
+				abandon(mploader, player, ply);
+			}
+		}
+		conquers(mploader, player, ply);
+		redeployment(mploader, player, ply);
+		score(mploader, player, ply);
+	}
 }
 
 void Random::chooseDecline(MapLoader& mploader, Player* player, vector<Player>& ply) {

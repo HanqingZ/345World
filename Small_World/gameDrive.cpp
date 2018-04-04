@@ -28,7 +28,7 @@ GameDrive::~GameDrive() {
 void GameDrive::start() {
 
 	//Insert the number of players of this game
-	cout << "How many people play this game? (2 to 5)" << endl;
+	cout << "How many people play this game? (1 to 5)" << endl;
 	while (true) {
 		cin >> numOfPlayer;
 		if (numOfPlayer <= 5 && numOfPlayer >= 1)
@@ -162,19 +162,19 @@ void GameDrive::start() {
 
 				if (j.getStrategyName() == "Aggressive") {
 					strat = new Aggressive();
-					strat->execute(testMap, ai, players);
+					strat->execute(testMap, ai, players, numOfTurn);
 				}
 				else if (j.getStrategyName() == "Defensive") {
 					strat = new Defensive();
-					strat->execute(testMap, ai, players);
+					strat->execute(testMap, ai, players, numOfTurn);
 				}
 				else if (j.getStrategyName() == "Moderate") {
 					strat = new Moderate();
-					strat->execute(testMap, ai, players);
+					strat->execute(testMap, ai, players, numOfTurn);
 				}
 				else{
 					strat = new Random();
-					strat->execute(testMap, ai, players);
+					strat->execute(testMap, ai, players, numOfTurn);
 				}
 			}
 		}

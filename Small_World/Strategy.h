@@ -15,7 +15,7 @@ class Strategy {
 public:
 	Strategy() {}
 	//int getPlayerType();
-	virtual void execute(MapLoader&, Player*, vector<Player>&) {}
+	virtual void execute(MapLoader&, Player*, vector<Player>&, int) {}
 	virtual void abandon(MapLoader&, Player*, vector<Player>&) {}
 	virtual void conquers(MapLoader&, Player*, vector<Player>&) {}
 	virtual void redeployment(MapLoader&, Player*, vector<Player>&) {}
