@@ -75,18 +75,19 @@ void GameDrive::start() {
 	//====================================================================================
 	//The game start!
 	int answer =1;
+	string ans, anss;
+
 	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
-		//
+		//Add decorator
 		if (answer == 1) {
-			cout << "Do you want to add decorator Observer (o for no and 1 for yes)?" << endl;
-
+			cout << "Do you want to add decorator Observer (0 for no and 1 for yes)?" << endl;
 			cin >> answer;
 			if (answer == 1) {
 				addObserver(players);
 			}
 		}
-		//
+		//start loop for every players
 		for (auto j : players) {
 			if (!j.getIsComputer()) {
 			Player *p = &j;
@@ -98,8 +99,6 @@ void GameDrive::start() {
 			string ans, anss;
 			j.setStep("pick");
 			cout << "Player #" << j.getPlayerId() << endl;
-				string ans, anss;
-				cout << "Player #" << j.getPlayerId() << endl;
 
 			if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
 				charaCombo();
