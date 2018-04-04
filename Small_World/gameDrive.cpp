@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Races.h"
 #include "PowerBudges.h"
+#include "TokenObserverDecorator.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -73,17 +74,38 @@ void GameDrive::start() {
 
 	//====================================================================================
 	//The game start!
+	int answer =1;
 	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
+		//
+		if (answer == 1) {
+			cout << "Do you want to add decorator Observer (o for no and 1 for yes)?" << endl;
+
+			cin >> answer;
+			if (answer == 1) {
+				addObserver(players);
+			}
+		}
+		//
 		for (auto j : players) {
 			if (!j.getIsComputer()) {
+			Player *p = &j;
+			po = new PhaseObserver();
+			so = new StatisticsObserver();
+			j.Attach(po);
+			j.Attach(so);
+			j.setPlayerTurn(numOfTurn);
+			string ans, anss;
+			j.setStep("pick");
+			cout << "Player #" << j.getPlayerId() << endl;
 				string ans, anss;
 				cout << "Player #" << j.getPlayerId() << endl;
 
-				if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
-					charaCombo();
-					cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
-					cin >> numOfCombo;
+			if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
+				charaCombo();
+				j.Notify(p);
+			//	cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
+				cin >> numOfCombo;
 
 					string sl = shufflePickRace(rv[numOfCombo - 1]);
 					string s2 = shufflePickPower(pv[numOfCombo - 1]);
@@ -92,17 +114,24 @@ void GameDrive::start() {
 					rv.erase(rv.begin() + numOfCombo - 1);
 					pv.erase(pv.begin() + numOfCombo - 1);
 
-					j.minusCoins(numOfCombo - 1);
-
-					j.conquers(testMap, numOfTurn, players);
-					j.redployment(testMap, players);
-					j.score(testMap, players);
-				}
-				else {
-					cout << "Do u want to decline your current combo? (y or n)\n";
-					cin >> anss;
-					if (anss == "y") {
-						if (!j.chooseDecline(testMap, numOfTurn, players)) {
+				j.minusCoins(numOfCombo - 1);
+				j.setStep("conquer");
+				j.Notify(p);
+				j.conquers(testMap, numOfTurn, players);
+				j.setStep("reDeploy");
+				j.Notify(p);
+				j.redployment(testMap, players);
+				j.setStep("score");
+				j.Notify(p);
+				j.score(testMap, players);
+				j.Detach(po);
+				j.Detach(so);
+			}
+			else {
+				cout << "Do u want to decline your current combo? (y or n)\n";
+				cin >> anss;
+				if (anss == "y") {
+					if (!j.chooseDecline(testMap, numOfTurn, players)) {
 							j.conquers(testMap, numOfTurn, players);
 							j.redployment(testMap, players);
 						}
@@ -180,7 +209,32 @@ void GameDrive::chooseMapType(int numOfPlayer) {
 		break;
 	}
 }
-
+void GameDrive::addVictoryCoinObserver(int victoryCoinOAnwser, vector<Player> players) {
+	Observer *victoryCoinObserver = new VictoryCoinObserverDecorator(PhaseObserver());
+	for (auto p : players) {
+		p.Attach(victoryCoinObserver);
+	}
+}
+void GameDrive::addTokenObserverDecorator(int tokenOanwser, vector<Player> players) {
+	Observer *tokenObserverDecorator = new TokenObserverDecorator(PhaseObserver());
+	for (auto p : players) {
+		p.Attach(tokenObserverDecorator);
+	}
+}
+void GameDrive::addObserver(vector<Player> players) {
+	cout << "Do you want to add tokenObserver (o for no and 1 for yes)?" << endl;
+	int tokenOanwser;
+	cin >> tokenOanwser;
+	if (tokenOanwser == 1) {
+		addTokenObserverDecorator(tokenOanwser, players);
+	}
+	cout << "Do you want to add victoryCoinObserver (o for no and 1 for yes)?" << endl;
+	int victoryCoinOAnwser;
+	cin >> victoryCoinOAnwser;
+	if (victoryCoinOAnwser == 1) {
+		addVictoryCoinObserver(tokenOanwser, players);
+	}
+}
 
 int myrandom(int i) {
 	return std::rand() % i;

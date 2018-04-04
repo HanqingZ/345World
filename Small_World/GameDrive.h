@@ -6,10 +6,14 @@
 #include "MapLoader.h"
 #include "Strategy.h"
 #include "StrategyMethod.h"
-
+#include "PhaseObserver.h"
+#include "ObserverDecorator.h"
+#include "VictoryCoinObserverDecorator.h"
+#include "TokenObserverDecorator.h"
+#include "StatisticsObserver.h"
+#include <vector>
 #include <array>
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -25,6 +29,8 @@ private:
 	Races r;
 	PowerBudges pb;
 	MapLoader testMap;
+	PhaseObserver *po;
+	StatisticsObserver *so;
 	Strategy* strat;
 
 public:
@@ -41,7 +47,9 @@ public:
 	string shufflePickPower(int);
 	void setRaceType(Races);
 	void setPowerType(PowerBudges);
-
+	void addObserver(vector<Player> players);
+	void addVictoryCoinObserver(int victoryCoinOAnwser, vector<Player> players);
+	void addTokenObserverDecorator(int tokenOanwser, vector<Player> players);
 	vector<Player> players;
 	//vector<AI> ai;
 

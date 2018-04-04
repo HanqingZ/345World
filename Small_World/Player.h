@@ -5,14 +5,14 @@
 #include "Races.h"
 #include "PowerBudges.h"
 #include "MapLoader.h"
-
+#include "Subject.h"
 #include <vector>
 #include <string>
 #include <list>
 
 using namespace std;
 
-class Player {
+class Player : public Subject {
 
 protected:
 	int numOfPlayer;	//total number of players
@@ -24,14 +24,18 @@ protected:
 	int coinOwn;
 	string strategyType;
 	int numOfDecline = 0;
-
+	
 	int regionId;
 	Dice d;
 	int diceResult;
 	Races races;
 	PowerBudges powerbudges;
 	//Strategy* strat = nullptr;
-
+	int playerTurn;
+	string step;
+	int regionTotalNum;
+	list<int>::iterator i;
+	int playerRegionSize=0;
 public:
 	
 	Player();
@@ -45,29 +49,40 @@ public:
 	void redployment(MapLoader&, vector<Player>&);
 	void score(MapLoader&, vector<Player>&);
 	bool chooseDecline(MapLoader&, int, vector<Player>&);
-
+	void setRegionTotalNum(int regionTotalNum) {
+		this->regionTotalNum = regionTotalNum;
+	}
 	void addCoins(int);
 	void minusCoins(int);
 	void setCoins(int);
 	void addNumOfToken(int);
 	void minusNumOfToken(int);
 	void resetNumOfToken();
+	void setStep(string s) { this->step = s; }
+	void setPlayerTurn(int turn) { this->playerTurn = turn; }
 	void addRace(Races);
 	void addPower(PowerBudges);
-	void addJoinRegion(int);
+	void addJoinRegion(int rg, vector<Player>& players , int playerID);
 	int getCoins();
 	int getTokenNumber();
 	int getPlayerId();
+	int getPlayerTurn() { return playerTurn; }
+	string getStep() { return step;}
 	bool getIsComputer();
+	vector<Races> getRaceVector() {
+		return this->race;
+	}
+	void minusRegion(int rg, vector<Player>& players, int playerID);
 	string getStrategyName();
-	//vector<Region> getOwnedRegion(int);
 	void shown();
-
+	int getPlayerRegionSize();
+	void setPlayerRegionSize(int playerRegionSize);
 	list<int> ownedRegionSet;
 	//vector<Region*> ownedRegion;
 	vector<Races> race;
 	vector<PowerBudges> powerbudge;
-	
+	list<int> GetList();
+
 };
 
 #endif
