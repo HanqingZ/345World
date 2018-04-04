@@ -29,6 +29,10 @@ private:
 	MapLoader testMap;
 	PhaseObserver *po;
 	StatisticsObserver *so;
+	Observer *victoryCoinObserver;
+	Observer *tokenObserverDecorator;
+	int tokenOanwser;
+	int victoryCoinOAnwser;
 public:
 	GameDrive();
 	~GameDrive();
@@ -48,7 +52,7 @@ public:
 	void addTokenObserverDecorator(int tokenOanwser, vector<Player> players);
 	vector<Player> players;
 	vector<AI> ai;
-
+	void deleteObservers();
 };
 
 #endif

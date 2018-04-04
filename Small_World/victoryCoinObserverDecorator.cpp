@@ -12,5 +12,8 @@ void VictoryCoinObserverDecorator::Update(Player* player) {
 
 	int coin = player->getCoins();
 	int playerId = player->getPlayerId();
-	cout << "Player " << playerId << " has " << coin << "tokens" << endl;
+	cout << "Player " << playerId << " has " << coin << "coins" << endl;
 }
+//VictoryCoinObserverDecorator::VictoryCoinObserverDecorator(Observer decoratedObserver) :ObserverDecorator(decoratedObserver) {
+//	observerType = "victory observer";
+//}

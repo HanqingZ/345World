@@ -5,6 +5,6 @@
 using namespace std;
 class VictoryCoinObserverDecorator :public ObserverDecorator {
 	public:
-	VictoryCoinObserverDecorator(Observer decoratedObserver) :ObserverDecorator(decoratedObserver) {}
+		VictoryCoinObserverDecorator(Observer decoratedObserver) :ObserverDecorator(decoratedObserver) {}
 	virtual void Update(Player* p);
 };

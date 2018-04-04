@@ -24,6 +24,8 @@ public:
 	//void Subject::Notify(MapLoader* m)
 	virtual void Notify(Player*);
 	virtual void NotifyAll(int numRegion, vector<Player>& players);
+	///virtual void NotifyT(Player*);
+	//virtual void NotifyC(Player*);
 };
 
 #endif

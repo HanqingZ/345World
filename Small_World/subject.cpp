@@ -70,6 +70,7 @@ void Subject::Notify(Player* s)
 	for (size_t i = 0; i < observers.size(); i++)
 	{
 		observers[i]->Update(s);
+		
 	}
 }
 
@@ -81,3 +82,28 @@ void Subject::NotifyAll(int numRegion, vector<Player> &players)
 		}
 	}
 }
+//void Subject::NotifyT(Player* s)
+//{
+//	//cout << "Notify" << endl;
+//
+//	for (size_t i = 0; i < observers.size(); i++)
+//	{
+//		 
+//		if (observers[i]->observerType == "token observer") {
+//			observers[i]->Update(s);
+//		}
+//	}
+//}
+
+//void Subject::NotifyC(Player* s)
+//{
+//	//cout << "Notify" << endl;
+//
+//	for (size_t i = 0; i < observers.size(); i++)
+//	{
+//
+//		if (observers[i]->observerType == "victory observer") {
+//			observers[i]->Update(s);
+//		}
+//	}
+//}

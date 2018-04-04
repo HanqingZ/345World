@@ -5,6 +5,11 @@
 using namespace std;
 class TokenObserverDecorator :public ObserverDecorator {
 	public:
-	TokenObserverDecorator(Observer decoratedObserver):ObserverDecorator(decoratedObserver) {}
+		TokenObserverDecorator(Observer decoratedObserver) :ObserverDecorator(decoratedObserver)  {}
+		/*{
+			observerType = "token observer";
+		}*/
 	virtual void Update(Player* p);
+	
 };
+//:ObserverDecorator(decoratedObserver) {}

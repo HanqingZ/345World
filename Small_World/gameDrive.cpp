@@ -84,6 +84,7 @@ void GameDrive::start() {
 			cin >> answer;
 			if (answer == 1) {
 				addObserver(players);
+				
 			}
 		}
 		//
@@ -93,6 +94,10 @@ void GameDrive::start() {
 			so = new StatisticsObserver();
 			j.Attach(po);
 			j.Attach(so);
+			if(tokenOanwser==1)
+			j.Attach(tokenObserverDecorator);
+			if (victoryCoinOAnwser == 1)
+			j.Attach(victoryCoinObserver);
 			j.setPlayerTurn(numOfTurn);
 			string ans, anss;
 			j.setStep("pick");
@@ -114,13 +119,13 @@ void GameDrive::start() {
 				j.minusCoins(numOfCombo - 1);
 				j.setStep("conquer");
 				j.Notify(p);
-				j.conquers(testMap, numOfTurn, players);
+				j.conquers(testMap, numOfTurn, players, tokenOanwser);
 				j.setStep("reDeploy");
 				j.Notify(p);
 				j.redployment(testMap, players);
 				j.setStep("score");
 				j.Notify(p);
-				j.score(testMap, players);
+				j.score(testMap, players, victoryCoinOAnwser);
 				j.Detach(po);
 				j.Detach(so);
 			}
@@ -129,15 +134,15 @@ void GameDrive::start() {
 				cin >> anss;
 				if (anss == "y") {
 					if (!j.chooseDecline(testMap, numOfTurn, players)) {
-						j.conquers(testMap, numOfTurn, players);
+						j.conquers(testMap, numOfTurn, players, tokenOanwser);
 						j.redployment(testMap, players);
 					}
 				}
 				else {
-					j.conquers(testMap, numOfTurn, players);
+					j.conquers(testMap, numOfTurn, players, tokenOanwser);
 					j.redployment(testMap, players);
 				}
-				j.score(testMap, players);
+				j.score(testMap, players, victoryCoinOAnwser);
 			}
 		}
 		//AI loop start
@@ -146,6 +151,11 @@ void GameDrive::start() {
 			a.strat->execute(testMap, c);
 		}
 		//AI loop end
+		if (answer == 1) {
+			//delete observers after each turn 
+			deleteObservers();
+		}
+	
 	}
 	cout << "Thank you for enjoy this game.\n";
 }
@@ -176,26 +186,35 @@ void GameDrive::chooseMapType(int numOfPlayer) {
 	}
 }
 void GameDrive::addVictoryCoinObserver(int victoryCoinOAnwser, vector<Player> players) {
-	Observer *victoryCoinObserver = new VictoryCoinObserverDecorator(PhaseObserver());
+	victoryCoinObserver = new VictoryCoinObserverDecorator( PhaseObserver());
 	for (auto p : players) {
 		p.Attach(victoryCoinObserver);
 	}
 }
 void GameDrive::addTokenObserverDecorator(int tokenOanwser, vector<Player> players) {
-	Observer *tokenObserverDecorator = new TokenObserverDecorator(PhaseObserver());
+	tokenObserverDecorator =  new TokenObserverDecorator(PhaseObserver());
 	for (auto p : players) {
 		p.Attach(tokenObserverDecorator);
 	}
 }
+void GameDrive::deleteObservers( ) {
+	 
+	for (auto p : players) {
+		p.Detach(tokenObserverDecorator);
+		p.Detach(victoryCoinObserver);
+	}
+	tokenOanwser = 0;
+	victoryCoinOAnwser = 0;
+}
 void GameDrive::addObserver(vector<Player> players) {
 	cout << "Do you want to add tokenObserver (o for no and 1 for yes)?" << endl;
-	int tokenOanwser;
+	//int tokenOanwser;
 	cin >> tokenOanwser;
 	if (tokenOanwser == 1) {
 		addTokenObserverDecorator(tokenOanwser, players);
 	}
 	cout << "Do you want to add victoryCoinObserver (o for no and 1 for yes)?" << endl;
-	int victoryCoinOAnwser;
+	//int victoryCoinOAnwser;
 	cin >> victoryCoinOAnwser;
 	if (victoryCoinOAnwser == 1) {
 		addVictoryCoinObserver(tokenOanwser, players);

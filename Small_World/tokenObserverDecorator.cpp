@@ -14,3 +14,6 @@ void TokenObserverDecorator::Update(Player* player) {
 	int playerId = player->getPlayerId();
 	cout << "Player " << playerId << " has " << token << "tokens" << endl;
 }
+//TokenObserverDecorator::TokenObserverDecorator(Observer decoratedObserver) :ObserverDecorator(decoratedObserver) {
+//	observerType = "token observer";
+//}

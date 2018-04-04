@@ -44,9 +44,9 @@ public:
 //	virtual void setStrategy(MapLoader&, int, vector<Player>&);
 
 	void pick_race(Races&, PowerBudges&, vector<Player>&);
-	void conquers(MapLoader&, int, vector<Player>&);
+	void conquers(MapLoader& m, int a , vector<Player>& p, int answer);
 	void redployment(MapLoader&, vector<Player>&);
-	void score(MapLoader&, vector<Player>&);
+	void score(MapLoader&, vector<Player>&,int);
 	bool chooseDecline(MapLoader&, int, vector<Player>&);
 	void setRegionTotalNum(int regionTotalNum) {
 		this->regionTotalNum = regionTotalNum;
@@ -78,7 +78,7 @@ public:
 	//vector<Region*> ownedRegion;
 	vector<Races> race;
 	vector<PowerBudges> powerbudge;
-	list<int> GetList();
+	//list<int> GetList();
 
 };
 

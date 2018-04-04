@@ -67,7 +67,7 @@ void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
 }
 
 //Conquers some regions and Run once per Player in each turn
-void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &player) {
+void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &player, int answer) {
 	
 	this->setRegionTotalNum(mploader.regions.size());
 //	playerTurn = numberOfTurn;
@@ -109,6 +109,10 @@ void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &pla
 				this->minusNumOfToken(numOfTokensNeededToConquerRegion);
 				 
 				cout << "You used " << numOfTokensNeededToConquerRegion << " tokens to conquer this region" << ", and you have " << this->getTokenNumber() << " tokens left" << endl;
+				if (answer == 1) {
+					Notify(this);
+				}
+				
 			}
 			else {
 				//play dice here, and decide if the user can conquer the region or not
@@ -206,7 +210,7 @@ void Player::redployment(MapLoader &mploader, vector<Player>& player) {
 }
 
 //Scoring Victory Coins
-void Player::score(MapLoader &mploader, vector<Player>& player) {
+void Player::score(MapLoader &mploader, vector<Player>& player,int victoryCoinOAnwser) {
 	int forest = 0; 
 	int farm = 0;
 	int hill = 0;
@@ -271,7 +275,9 @@ void Player::score(MapLoader &mploader, vector<Player>& player) {
 		
 	this->coinOwn += ownedRegionSet.size();
 	cout << "You owns " << coinOwn << " coins.\n";
-
+	if (victoryCoinOAnwser == 1) {
+		Notify(this);
+	}
 }
 
 bool Player::chooseDecline(MapLoader &mploader, int numOfTurn, vector<Player>& player) {
@@ -333,8 +339,7 @@ void Player::resetNumOfToken() {
 //}
 
 void Player::addJoinRegion(int rg, vector<Player>& players,int playerID) {
-	players[playerID - 1].GetList();
-	players[playerID-1].GetList().push_back(rg);
+	ownedRegionSet.push_back(rg);
 	int i = ownedRegionSet.size();
 	players[playerID-1].setPlayerRegionSize(i);
 	//Notify(regionTotalNum, this);
@@ -349,7 +354,7 @@ void Player::minusRegion(int rg, vector<Player>& players, int playerID) {
 	cout << ownedRegionSet.size()<<"shgdfsdhjgfds" << endl;
 	for (auto i : ownedRegionSet) {
 		if (i == rg)
-			players[playerID-1].GetList().remove(i);
+			ownedRegionSet.remove(i);
 	}
 	cout << ownedRegionSet.size() << "shgdfsdhjgfds" << endl;
 	//Notify(regionTotalNum, this);
@@ -389,7 +394,4 @@ int Player::getPlayerRegionSize() {
 }
 void Player::setPlayerRegionSize(int playerRegionSize) {
 	this->playerRegionSize = playerRegionSize;
-}
-list<int> Player::GetList() {
-	return ownedRegionSet;
 }
