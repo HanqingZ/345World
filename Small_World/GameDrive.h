@@ -4,9 +4,13 @@
 #include "Player.h"
 #include "AI.h"
 #include "MapLoader.h"
+#include "Strategy.h"
+#include "StrategyMethod.h"
 
 #include <array>
 #include <string>
+#include <vector>
+
 using namespace std;
 
 class GameDrive {
@@ -21,6 +25,7 @@ private:
 	Races r;
 	PowerBudges pb;
 	MapLoader testMap;
+	Strategy* strat;
 
 public:
 	GameDrive();
@@ -38,7 +43,7 @@ public:
 	void setPowerType(PowerBudges);
 
 	vector<Player> players;
-	vector<AI> ai;
+	//vector<AI> ai;
 
 };
 

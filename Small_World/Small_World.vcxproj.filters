@@ -45,19 +45,7 @@
     <ClCompile Include="AI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Aggresive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Defensive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Moderate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="strategy.cpp">
+    <ClCompile Include="strategyMethod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,16 +80,7 @@
     <ClInclude Include="AI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Aggressive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Defensive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Moderate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Random.h">
+    <ClInclude Include="StrategyMethod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

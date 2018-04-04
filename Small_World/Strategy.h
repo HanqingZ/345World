@@ -2,7 +2,7 @@
 #define STRATEGY_H
 
 #include "Player.h"
-//#include "AI.h"
+#include "AI.h"
 #include "MapLoader.h"
 #include "Dice.h"
 #include <vector>
@@ -15,12 +15,12 @@ class Strategy {
 public:
 	Strategy() {}
 	//int getPlayerType();
-	virtual void execute(MapLoader&, Player*);
-	virtual void pick_race(MapLoader&, Player*) {}
-	virtual void conquers(MapLoader&, Player*) {}
-	virtual void redeployment(MapLoader&, Player*) {}
-	virtual void score(MapLoader&, Player*) {}
-	virtual void chooseDecline(Player*) {}
+	virtual void execute(MapLoader&, Player*, vector<Player>&) {}
+	virtual void abandon(MapLoader&, Player*, vector<Player>&) {}
+	virtual void conquers(MapLoader&, Player*, vector<Player>&) {}
+	virtual void redeployment(MapLoader&, Player*, vector<Player>&) {}
+	virtual void score(MapLoader&, Player*, vector<Player>&) {}
+	virtual void chooseDecline(Player*, vector<Player>&) {}
 };
 
 #endif

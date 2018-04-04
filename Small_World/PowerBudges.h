@@ -27,7 +27,7 @@ public:
 	string getPowerName();
 	void setPowerName(string);
 	int getVictoryCoin();
-	virtual void setVictoryCoins(int);
+	virtual int setVictoryCoins(int);
 	int getTokenNumber();
 	void setTokenNumber(int);
 	bool getActiveCondition();
@@ -45,7 +45,7 @@ public:
 class Alchemist : public PowerBudges {
 public:
 	Alchemist();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Berserk : public PowerBudges {
@@ -81,13 +81,13 @@ public:
 class Forest : public PowerBudges {
 public:
 	Forest();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Fortified : public PowerBudges {
 public:
 	Fortified();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Heroic : public PowerBudges {
@@ -98,13 +98,13 @@ public:
 class Hill : public PowerBudges {
 public:
 	Hill();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Merchant : public PowerBudges {
 public:
 	Merchant();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Mounted : public PowerBudges {
@@ -115,7 +115,7 @@ public:
 class Pillaging : public PowerBudges {
 public:
 	Pillaging();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Seafaring : public PowerBudges {
@@ -136,7 +136,7 @@ public:
 class Swamp : public PowerBudges {
 public:
 	Swamp();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 class Underworld : public PowerBudges {
@@ -147,7 +147,7 @@ public:
 class Wealthy : public PowerBudges {
 public:
 	Wealthy();
-	void setVictoryCoins(int&);
+	int setVictoryCoins(int);
 };
 
 #endif

@@ -48,6 +48,7 @@ public:
 
 	void addCoins(int);
 	void minusCoins(int);
+	void setCoins(int);
 	void addNumOfToken(int);
 	void minusNumOfToken(int);
 	void resetNumOfToken();
@@ -58,6 +59,7 @@ public:
 	int getTokenNumber();
 	int getPlayerId();
 	bool getIsComputer();
+	string getStrategyName();
 	//vector<Region> getOwnedRegion(int);
 	void shown();
 

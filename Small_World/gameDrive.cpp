@@ -30,7 +30,7 @@ void GameDrive::start() {
 	cout << "How many people play this game? (2 to 5)" << endl;
 	while (true) {
 		cin >> numOfPlayer;
-		if (numOfPlayer <= 5 && numOfPlayer >= 2)
+		if (numOfPlayer <= 5 && numOfPlayer >= 1)
 			break;
 		cout << "Please enter a number between 2 and 5.\n" 
 			<< "How many people play this game? (2 to 5)\n";
@@ -67,7 +67,7 @@ void GameDrive::start() {
 	if (numOfmap > numOfPlayer) {
 		for (int j = numOfPlayer; j < numOfmap; ++j) {
 			plyAI = AI(j + 1);
-			ai.push_back(plyAI);
+			players.push_back(plyAI);
 		}
 	}
 
@@ -76,47 +76,79 @@ void GameDrive::start() {
 	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
 		for (auto j : players) {
-			string ans, anss;
-			cout << "Player #" << j.getPlayerId() << endl;
+			if (!j.getIsComputer()) {
+				string ans, anss;
+				cout << "Player #" << j.getPlayerId() << endl;
 
-			if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
-				charaCombo();
-				cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
-				cin >> numOfCombo;
+				if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
+					charaCombo();
+					cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
+					cin >> numOfCombo;
 
-				string sl = shufflePickRace(rv[numOfCombo - 1]);
-				string s2 = shufflePickPower(pv[numOfCombo - 1]);
+					string sl = shufflePickRace(rv[numOfCombo - 1]);
+					string s2 = shufflePickPower(pv[numOfCombo - 1]);
 
-				j.pick_race(r, pb, players);
-				rv.erase(rv.begin() + numOfCombo - 1);
-				pv.erase(pv.begin() + numOfCombo - 1);
+					j.pick_race(r, pb, players);
+					rv.erase(rv.begin() + numOfCombo - 1);
+					pv.erase(pv.begin() + numOfCombo - 1);
 
-				j.minusCoins(numOfCombo - 1);
+					j.minusCoins(numOfCombo - 1);
 
-				j.conquers(testMap, numOfTurn, players);
-				j.redployment(testMap, players);
-				j.score(testMap, players);
-			}
-			else {
-				cout << "Do u want to decline your current combo? (y or n)\n";
-				cin >> anss;
-				if (anss == "y") {
-					if (!j.chooseDecline(testMap, numOfTurn, players)) {
+					j.conquers(testMap, numOfTurn, players);
+					j.redployment(testMap, players);
+					j.score(testMap, players);
+				}
+				else {
+					cout << "Do u want to decline your current combo? (y or n)\n";
+					cin >> anss;
+					if (anss == "y") {
+						if (!j.chooseDecline(testMap, numOfTurn, players)) {
+							j.conquers(testMap, numOfTurn, players);
+							j.redployment(testMap, players);
+						}
+					}
+					else {
 						j.conquers(testMap, numOfTurn, players);
 						j.redployment(testMap, players);
 					}
+					j.score(testMap, players);
 				}
-				else {
-					j.conquers(testMap, numOfTurn, players);
-					j.redployment(testMap, players);
-				}
-				j.score(testMap, players);
 			}
-		}
-		//AI loop start
-		for (auto a : ai) {
-			AI* c = &a;
-			a.strat->execute(testMap, c);
+			else {
+				if (j.race.empty() || !j.race[0].getActiveCondition()) {
+					charaCombo();
+					cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
+					cin >> numOfCombo;
+
+					string sl = shufflePickRace(rv[numOfCombo - 1]);
+					string s2 = shufflePickPower(pv[numOfCombo - 1]);
+
+					j.pick_race(r, pb, players);
+					rv.erase(rv.begin() + numOfCombo - 1);
+					pv.erase(pv.begin() + numOfCombo - 1);
+
+					j.minusCoins(numOfCombo - 1);
+				}
+
+				Player* ai = &j;
+
+				if (j.getStrategyName() == "Aggressive") {
+					strat = new Aggressive();
+					strat->execute(testMap, ai, players);
+				}
+				else if (j.getStrategyName() == "Defensive") {
+					strat = new Defensive();
+					strat->execute(testMap, ai, players);
+				}
+				else if (j.getStrategyName() == "Moderate") {
+					strat = new Moderate();
+					strat->execute(testMap, ai, players);
+				}
+				else{
+					strat = new Random();
+					strat->execute(testMap, ai, players);
+				}
+			}
 		}
 		//AI loop end
 	}
