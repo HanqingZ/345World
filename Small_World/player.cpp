@@ -208,7 +208,7 @@ void Player::redployment(MapLoader &mploader, vector<Player>& player) {
 }
 
 //Scoring Victory Coins
-void Player::score(MapLoader &mploader, vector<Player>& player) {
+void Player::score(MapLoader &mploader, vector<Player>& player,int victoryCoinOAnwser) {
 	int forest = 0; 
 	int farm = 0;
 	int hill = 0;
