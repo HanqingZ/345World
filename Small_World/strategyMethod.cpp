@@ -709,6 +709,7 @@ void Random::conquers(MapLoader& mploader, Player* player, vector<Player>& ply) 
 					answer = true;
 				}
 				else {
+					cout << "Your tokens number is lower than required, you don't own this regions.\n";
 					break;
 				}
 			}
@@ -729,6 +730,7 @@ void Random::conquers(MapLoader& mploader, Player* player, vector<Player>& ply) 
 			mploader.regions[rnum].setOwnerID(player->getPlayerId());
 
 			mploader.regions[rnum].addContainToken(localToken);
+			cout << "You used " << localToken << " tokens to conquer this region" << ", and you have " << player->getTokenNumber() << " tokens left" << endl;
 
 			if (answer == true)
 				break;

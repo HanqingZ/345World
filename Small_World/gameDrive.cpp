@@ -18,7 +18,7 @@ vector<int> rv;
 vector<int> pv;
 
 GameDrive::GameDrive() {
-
+	this->players.clear();
 }
 
 GameDrive::~GameDrive() {
@@ -88,28 +88,29 @@ void GameDrive::start() {
 				
 			}
 		}
-		//start loop for every players
-		for (auto j : players) {
-			if (!j.getIsComputer()) {
-			Player *p = &j;
-			po = new PhaseObserver();
-			so = new StatisticsObserver();
-			j.Attach(po);
-			j.Attach(so);
-			if(tokenOanwser==1)
-			j.Attach(tokenObserverDecorator);
-			if (victoryCoinOAnwser == 1)
-			j.Attach(victoryCoinObserver);
-			j.setPlayerTurn(numOfTurn);
-			string ans, anss;
-			j.setStep("pick");
-			cout << "Player #" << j.getPlayerId() << endl;
 
-			if (numOfTurn == 1 || !j.race[0].getActiveCondition()) {
-				charaCombo();
-				j.Notify(p);
-			//	cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
-				cin >> numOfCombo;
+		for (auto j : players) {
+			//start loop for every players
+			if (!j.getIsComputer()) {
+				Player *p = &j;
+				po = new PhaseObserver();
+				so = new StatisticsObserver();
+				j.Attach(po);
+				j.Attach(so);
+				if (tokenOanwser == 1)
+					j.Attach(tokenObserverDecorator);
+				if (victoryCoinOAnwser == 1)
+					j.Attach(victoryCoinObserver);
+				j.setPlayerTurn(numOfTurn);
+				string ans, anss;
+				j.setStep("pick");
+				cout << "Player #" << j.getPlayerId() << endl;
+
+				if (numOfTurn == 1 || j.getNumberOfDecline() == 0) {
+					charaCombo();
+					j.Notify(p);
+					//	cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
+					cin >> numOfCombo;
 
 					string sl = shufflePickRace(rv[numOfCombo - 1]);
 					string s2 = shufflePickPower(pv[numOfCombo - 1]);
@@ -118,37 +119,38 @@ void GameDrive::start() {
 					rv.erase(rv.begin() + numOfCombo - 1);
 					pv.erase(pv.begin() + numOfCombo - 1);
 
-				j.minusCoins(numOfCombo - 1);
-				j.setStep("conquer");
-				j.Notify(p);
-				j.conquers(testMap, numOfTurn, players, tokenOanwser);
-				j.setStep("reDeploy");
-				j.Notify(p);
-				j.redployment(testMap, players);
-				j.setStep("score");
-				j.Notify(p);
-				j.score(testMap, players, victoryCoinOAnwser);
-				j.Detach(po);
-				j.Detach(so);
-			}
-			else {
-				cout << "Do u want to decline your current combo? (y or n)\n";
-				cin >> anss;
-				if (anss == "y") {
-					if (!j.chooseDecline(testMap, numOfTurn, players)) {
+					j.minusCoins(numOfCombo - 1);
+					j.setStep("conquer");
+					j.Notify(p);
+					j.conquers(testMap, numOfTurn, players, tokenOanwser);
+					j.setStep("reDeploy");
+					j.Notify(p);
+					j.redployment(testMap, players);
+					j.setStep("score");
+					j.Notify(p);
+					j.score(testMap, players, victoryCoinOAnwser);
+					j.Detach(po);
+					j.Detach(so);
+				}
+				else {
+					cout << "Do u want to decline your current combo? (y or n)\n";
+					cin >> anss;
+					if (anss == "y") {
+						if (!j.chooseDecline(testMap, numOfTurn, players)) {
+							j.conquers(testMap, numOfTurn, players, tokenOanwser);
+							j.redployment(testMap, players);
+						}
+					}
+					else {
 						j.conquers(testMap, numOfTurn, players, tokenOanwser);
 						j.redployment(testMap, players);
 					}
+					j.score(testMap, players, victoryCoinOAnwser);
 				}
-				else {
-					j.conquers(testMap, numOfTurn, players, tokenOanwser);
-					j.redployment(testMap, players);
-				}
-				j.score(testMap, players, victoryCoinOAnwser);
 			}
-		}
-		//AI loop start
-else {
+
+			//AI loop start
+			else {
 				if (j.race.empty() || !j.race[0].getActiveCondition()) {
 					charaCombo();
 					cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
@@ -178,18 +180,18 @@ else {
 					strat = new Moderate();
 					strat->execute(testMap, ai, players, numOfTurn);
 				}
-				else{
+				else {
 					strat = new Random();
 					strat->execute(testMap, ai, players, numOfTurn);
 				}
+
 			}
+			//AI loop end
 		}
-		//AI loop end
 		if (answer == 1) {
 			//delete observers after each turn 
 			deleteObservers();
 		}
-	
 	}
 	cout << "Thank you for enjoy this game.\n";
 }

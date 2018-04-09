@@ -66,13 +66,13 @@ void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
 void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &player, int answer) {
 	
 	this->setRegionTotalNum(mploader.regions.size());
-	int numOfToken; //input
+	int numOfToken = 0; //input
 	bool question = true;
 	bool check = false;
 	int regionId;
 	if (!player[id-1].ownedRegionSet.empty()) {
 		for (auto i : player[id-1].ownedRegionSet) {
-			numOfTokenOwn += mploader.regions[i].getUsefulContainToken();
+			numOfTokenOwn += (mploader.regions[i].getUsefulContainToken() - 1);
 			mploader.regions[i].resetContainToken(false);
 		}
 	}
@@ -90,7 +90,7 @@ void Player::conquers(MapLoader &mploader, int numberOfTurn, vector<Player> &pla
 				int oldeownerId = mploader.regions[regionId].getOwnerId();
 				if (oldeownerId != 100) {
 					int oldPlayerTokenNum = mploader.regions[regionId].getUsefulContainToken();
-					player[oldeownerId - 1].addNumOfToken(oldPlayerTokenNum);	
+					player[oldeownerId - 1].addNumOfToken(oldPlayerTokenNum - 1);	
 					mploader.regions[regionId].resetContainToken(true);
 					player[oldeownerId - 1].minusRegion(regionId, player, getPlayerId());
 				}
@@ -209,16 +209,9 @@ void Player::redployment(MapLoader &mploader, vector<Player>& player) {
 
 //Scoring Victory Coins
 void Player::score(MapLoader &mploader, vector<Player>& player,int victoryCoinOAnwser) {
-	int forest = 0; 
-	int farm = 0;
-	int hill = 0;
-	int lairs = 0;
-	int magic = 0;
-	int fortress = 0; 
-	int all = 0;
 
-	for (auto r : player[id].race) {
-		for (auto s : player[id].ownedRegionSet) {
+	for (auto r : player[id - 1].race) {
+		for (auto s : player[id - 1].ownedRegionSet) {
 			if (mploader.regions[s].getRegionType() == "Farmland"
 				&& (r.getRaceName() == "Human")) {
 				this->coinOwn = r.setVictoryCoins(this->coinOwn);
@@ -237,8 +230,8 @@ void Player::score(MapLoader &mploader, vector<Player>& player,int victoryCoinOA
 
 		}
 	}
-	for (auto p : player[id].powerbudge) {
-		for (auto s : player[id].ownedRegionSet) {
+	for (auto p : player[id - 1].powerbudge) {
+		for (auto s : player[id - 1].ownedRegionSet) {
 			if(mploader.regions[s].getContainFortresses()
 				&& p.getPowerName() == "Fortified"){
 				this->coinOwn = p.setVictoryCoins(this->coinOwn);

@@ -31,6 +31,7 @@ AI::AI(int id) {
 
 	srand((unsigned)time(0));
 	int q = rand() % 4;
+	cout << q << endl;
 
 	switch (q)
 	{

@@ -36,8 +36,8 @@ protected:
 	int regionTotalNum;
 	list<int>::iterator i;
 	int playerRegionSize=0;
+
 public:
-	
 	Player();
 	Player(int);
 	~Player();
@@ -60,12 +60,14 @@ public:
 	void resetNumOfToken();
 	void setStep(string s) { this->step = s; }
 	void setPlayerTurn(int turn) { this->playerTurn = turn; }
-	void addRace(Races);
-	void addPower(PowerBudges);
+	void setNumberOfDecline(int d) { this->numOfDecline = d; }
+	//void addRace(Races);
+	//void addPower(PowerBudges);
 	void addJoinRegion(int rg, vector<Player>& players , int playerID);
 	int getCoins();
 	int getTokenNumber();
 	int getPlayerId();
+	int getNumberOfDecline() { return numOfDecline; }
 	int getPlayerTurn() { return playerTurn; }
 	string getStep() { return step;}
 	bool getIsComputer();
