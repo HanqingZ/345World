@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="AI" Collapsed="true">
-    <Position X="6.5" Y="6.75" Width="1.5" />
+    <Position X="7" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>AI.h</FileName>
@@ -57,7 +57,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Player" Collapsed="true">
-    <Position X="6.5" Y="5.25" Width="1.5" />
+    <Position X="7" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BgAAAECACApEgCAKSJMMCiDgAAQwEACEIgAAIYEAE7g=</HashCode>
       <FileName>Player.h</FileName>
@@ -316,7 +316,10 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Region" Collapsed="true">
-    <Position X="3" Y="6.25" Width="1.5" />
+    <Position X="2.75" Y="5.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
       <HashCode>gAQQcAAghoAgAAIDAAAkYAAAaAgAwoYKAQgAyIAIAxA=</HashCode>
       <FileName>Region.h</FileName>
@@ -337,7 +340,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Aggressive" Collapsed="true">
-    <Position X="24.25" Y="5.75" Width="1.5" />
+    <Position X="27.75" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAEAAAAAAAAAIA=</HashCode>
       <FileName>StrategyMethod.h</FileName>
@@ -351,35 +354,35 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Moderate" Collapsed="true">
-    <Position X="27.75" Y="6" Width="1.5" />
+    <Position X="29.5" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACAAAAAAQAAkAAAAAAAMAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
       <FileName>StrategyMethod.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Random" Collapsed="true">
-    <Position X="34.5" Y="6" Width="1.5" />
+    <Position X="33" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ACAAAACAAAAkAAAAAAAMAAAAAAAABAAAAAAAAAAAAIA=</HashCode>
       <FileName>StrategyMethod.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Subject" Collapsed="true">
-    <Position X="6.5" Y="4" Width="1.5" />
+    <Position X="7" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAIQAAAAAAAAAIAAIAAAAAAAIAIAABAAAAAAAAAAAA=</HashCode>
       <FileName>Subject.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="TokenObserverDecorator" Collapsed="true">
-    <Position X="8.75" Y="6" Width="1.5" />
+    <Position X="9" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>TokenObserverDecorator.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VictoryCoinObserverDecorator" Collapsed="true">
-    <Position X="10.75" Y="6" Width="1.5" />
+    <Position X="11" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>VictoryCoinObserverDecorator.h</FileName>
