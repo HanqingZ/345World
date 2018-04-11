@@ -316,7 +316,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Region" Collapsed="true">
-    <Position X="2.75" Y="5.25" Width="1.5" />
+    <Position X="2.75" Y="5.5" Width="1.5" />
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
