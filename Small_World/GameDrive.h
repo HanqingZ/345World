@@ -45,6 +45,7 @@ public:
 
 	//Adjective methods
 	void chooseMapType(int);
+	//void pickUp(Player&);
 	void charaCombo();
 	string shufflePickRace(int);
 	string shufflePickPower(int);

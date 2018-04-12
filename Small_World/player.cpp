@@ -25,10 +25,43 @@ Player::Player(int userId) {
 	this->isComputer = false;
 	this->coinOwn = 5;
 	this->numOfTokenOwn = 0;
-	this->strategyType = "";
 	this->race.clear();
 	this->powerbudge.clear();
 	this->ownedRegionSet.clear();
+
+	int q;
+	while (true) {
+		try {
+			cout << "Please choose a strategy mode (1 to 4)\n";
+			cin >> q;
+			if (q > 4 || q < 1)
+				throw q;
+			else
+				break;
+		}
+		catch (int x) {
+			cout << "Please enter a number between 1 and 4.\n";
+		}
+	}
+
+	switch (q){
+	case 1:
+		cout << "You choose aggressive.\n";
+		strategyType = "Aggressive";
+		break;
+	case 2:
+		cout << "You choose defensive.\n";
+		strategyType = "Defensive";
+		break;
+	case 3:
+		cout << "You choose moderate.\n";
+		strategyType = "Moderate";
+		break;
+	case 4:
+		cout << "You choose random.\n";
+		strategyType = "Random";
+		break;
+	}
 }
 
 Player::~Player() {
@@ -38,8 +71,8 @@ Player::~Player() {
 /*
 **	Player pick a Race and Super Power Combo
 **	If player already have a combo, he/she should set previous to be decline
-**	Once per Player
 */
+/*
 void Player::pick_race(Races& rs, PowerBudges& ps, vector<Player> &player) {
 	if (!race.empty() && !powerbudge.empty()) {
 		for (auto r : race) {
@@ -293,6 +326,7 @@ bool Player::chooseDecline(MapLoader &mploader, int numOfTurn, vector<Player>& p
 		return false;
 	}
 }
+*/
 
 //==================================================================
 
@@ -360,6 +394,7 @@ void Player::minusRegion(int rg, vector<Player>& players, int playerID) {
 	players[playerID - 1].setPlayerRegionSize(i);
 	NotifyAll(regionTotalNum, players);
 }
+
 int Player::getCoins() {
 	return this->coinOwn;
 }
@@ -391,4 +426,8 @@ int Player::getPlayerRegionSize() {
 }
 void Player::setPlayerRegionSize(int playerRegionSize) {
 	this->playerRegionSize = playerRegionSize;
+}
+
+void Player::notifys(Player* ply) {
+	Notify(ply);
 }

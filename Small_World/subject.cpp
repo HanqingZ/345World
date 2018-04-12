@@ -10,7 +10,10 @@ Subject::Subject()
 
 Subject::~Subject()
 {
-
+	/*for (vector<Observer*>::iterator it = observers.begin(); it != observers.end(); ++it) {
+		delete(*it);
+	}
+	observers.clear();*/
 }
 
 void Subject::Attach(Observer* o)

@@ -12,6 +12,7 @@
 using namespace std;
 
 void Aggressive::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
+	player->setRegionTotalNum(mploader.regions.size());
 	if (!player->ownedRegionSet.empty()) {
 		//Take all tokens from the owned region, only leave one token
 		for (auto i : player->ownedRegionSet) {
@@ -20,15 +21,37 @@ void Aggressive::execute(MapLoader& mploader, Player* player, vector<Player>& pl
 			mploader.regions[i].resetContainToken(false);
 		}
 	}
-	conquers(mploader, player, ply);
+	//conquers(mploader, player, ply);
 	//redeployment(mploader, player, ply);
-	score(mploader, player, ply);
+	//score(mploader, player, ply);
 }
 
-void Aggressive::conquers(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Aggressive::pickRace(Races &rs, PowerBudges &pb, Player* player) {
+	if (!player->race.empty() && !player->powerbudge.empty()) {
+		for (auto r : player->race) {
+			r.setActiveCondition(false);
+		}
+		for (auto p : player->powerbudge) {
+			p.setActiveCondition(false);
+		}
+	}
+
+	player->addRace(rs);
+	player->addPower(pb);
+	//cout << player[id-1].getRaceVector().at(0).getRaceId() << endl;
+
+	player->addNumOfToken(rs.getTokenNumber() + pb.getTokenNumber());
+
+	cout << "You pick the race " << rs.getRaceName()
+		<< " with special power " << pb.getPowerName()
+		<< " owns " << player->getTokenNumber() << " tokens on hand \n";
+}
+
+void Aggressive::conquers(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	int rnum;
 	int localToken;  //minimum tokens needed to conquer the region
 	Dice dice;
+	int i = 0;
 	bool answer = false;
 
 	if (!player->ownedRegionSet.empty()) {
@@ -36,42 +59,67 @@ void Aggressive::conquers(MapLoader& mploader, Player* player, vector<Player>& p
 		for (auto i : player->ownedRegionSet) {
 			player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
 			mploader.regions[i].resetContainToken(false);
+			cout << "You owned " << player->getTokenNumber() << " tokens.\n";
 		}
 	}
 
-	while (player->getTokenNumber() > 1) {
-		cout << "Please choose a region you want to conquer\n";
+	while (player->getTokenNumber() > 0) {
+		cout << "Player " << player->getPlayerId() << ", please select a region to conquer( must be a region near a border or a region adjacent to the regions you own)" << endl;
 		cin >> rnum;
 		if (mploader.checkCanConquer(rnum, player->getPlayerId())) {
 			localToken = mploader.regions[rnum].getContainToken() + 2;
 
 			if (localToken > player->getTokenNumber()) {
-				int i = dice.rollingResult();
+				cout << "You don't have enough tokens. Please roll the dice.\n";
+				i = dice.rollingResult();
 				if ((i + player->getTokenNumber()) >= localToken) {
-					player->minusNumOfToken(localToken - i);
+					if (mploader.regions[rnum].getOwnerId() != 100) {
+						int c = mploader.regions[rnum].getOwnerId();
+						ply[c - 1].ownedRegionSet.remove(c);
+						ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+						mploader.regions[rnum].resetContainToken(false);
+					}
+					if (mploader.regions[rnum].getIsLostTribes()) {
+						mploader.regions[rnum].minusContainToken(1);
+						mploader.regions[rnum].setIsLostTribes(false);
+					}
+					player->ownedRegionSet.push_back(rnum);
+					mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+					mploader.regions[rnum].addContainToken(player->getTokenNumber());
+					player->resetNumOfToken();
 					answer = true;
 				}
 				else {
+					cout << "You can't conquer the region " << rnum << endl;
 					break;
 				}
 			}
+
 			else {
+				if (mploader.regions[rnum].getOwnerId() != 100) {
+					int c = mploader.regions[rnum].getOwnerId();
+					ply[c - 1].ownedRegionSet.remove(c);
+					ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+					mploader.regions[rnum].resetContainToken(false);
+				}
+				if (mploader.regions[rnum].getIsLostTribes()) {
+					mploader.regions[rnum].minusContainToken(1);
+					mploader.regions[rnum].setIsLostTribes(false);
+				}
+
+				player->ownedRegionSet.push_back(rnum);
+				mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+				mploader.regions[rnum].addContainToken(localToken);
 				player->minusNumOfToken(localToken);
 			}
-			if (mploader.regions[rnum].getOwnerId() != 100) {
-				int c = mploader.regions[rnum].getOwnerId();
-				ply[c-1].ownedRegionSet.remove(c);
-				ply[c-1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
-				mploader.regions[rnum].resetContainToken(false);
-			}
-			if (mploader.regions[rnum].getIsLostTribes()) {
-				mploader.regions[rnum].minusContainToken(1);
-				mploader.regions[rnum].setIsLostTribes(false);
-			}
-			player->ownedRegionSet.push_back(rnum);
-			mploader.regions[rnum].setOwnerID(player->getPlayerId());
 
-			mploader.regions[rnum].addContainToken(localToken);
+			cout << "You used " << localToken << " tokens to conquer this region" << ", and you have " << player->getTokenNumber() << " tokens left" << endl;
+
+			if (answer == 1) {
+				player->notifys(player);
+			}
 
 			if (answer == true)
 				break;
@@ -82,7 +130,7 @@ void Aggressive::conquers(MapLoader& mploader, Player* player, vector<Player>& p
 	}
 }
 
-void Aggressive::score(MapLoader& mploader, Player* player, vector<Player>&) {
+void Aggressive::score(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	for (auto r : player->race) {
 		for (auto s : player->ownedRegionSet) {
 			if (mploader.regions[s].getRegionType() == "Farmland"
@@ -136,9 +184,14 @@ void Aggressive::score(MapLoader& mploader, Player* player, vector<Player>&) {
 	}
 
 	player->addCoins(player->ownedRegionSet.size());
-	cout << "You owns " << player->getCoins() << " coins.\n";
+	cout << "You owns " << player->getCoins() << " coins this turn.\n";
+
+	if (ans == 1) {
+		player->notifys(player);
+	}
 }
 
+//================================================================================
 //================================================================================
 
 void Defensive::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
@@ -158,9 +211,30 @@ void Defensive::execute(MapLoader& mploader, Player* player, vector<Player>& ply
 			mploader.regions[i].resetContainToken(false);
 		}
 	}
-	conquers(mploader, player, ply);
+	/*conquers(mploader, player, ply);
 	redeployment(mploader, player, ply);
-	score(mploader, player, ply);
+	score(mploader, player, ply);*/
+}
+
+void Defensive::pickRace(Races &rs, PowerBudges &pb, Player* player) {
+	if (!player->race.empty() && !player->powerbudge.empty()) {
+		for (auto r : player->race) {
+			r.setActiveCondition(false);
+		}
+		for (auto p : player->powerbudge) {
+			p.setActiveCondition(false);
+		}
+	}
+
+	player->addRace(rs);
+	player->addPower(pb);
+	//cout << player[id-1].getRaceVector().at(0).getRaceId() << endl;
+
+	player->addNumOfToken(rs.getTokenNumber() + pb.getTokenNumber());
+
+	cout << "You pick the race " << rs.getRaceName()
+		<< " with special power " << pb.getPowerName()
+		<< " owns " << player->getTokenNumber() << " tokens on hand \n";
 }
 
 void Defensive::abandon(MapLoader& mploader, Player* player, vector<Player>& ply) {
@@ -192,10 +266,11 @@ void Defensive::abandon(MapLoader& mploader, Player* player, vector<Player>& ply
 	}
 }
 
-void Defensive::conquers(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Defensive::conquers(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	int rnum;
 	int localToken;  //minimum tokens needed to conquer the region
 	Dice dice;
+	int i = 0;
 	bool answer = false;
 
 	if (!player->ownedRegionSet.empty()) {
@@ -203,42 +278,67 @@ void Defensive::conquers(MapLoader& mploader, Player* player, vector<Player>& pl
 		for (auto i : player->ownedRegionSet) {
 			player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
 			mploader.regions[i].resetContainToken(false);
+			cout << "You owned " << player->getTokenNumber() << " tokens.\n";
 		}
 	}
 
-	while (player->getTokenNumber() > 1) {
-		cout << "Please choose a region you want to conquer\n";
+	while (player->getTokenNumber() > 0) {
+		cout << "Player " << player->getPlayerId() << ", please select a region to conquer( must be a region near a border or a region adjacent to the regions you own)" << endl;
 		cin >> rnum;
 		if (mploader.checkCanConquer(rnum, player->getPlayerId())) {
 			localToken = mploader.regions[rnum].getContainToken() + 2;
 
 			if (localToken > player->getTokenNumber()) {
-				int i = dice.rollingResult();
+				cout << "You don't have enough tokens. Please roll the dice.\n";
+				i = dice.rollingResult();
 				if ((i + player->getTokenNumber()) >= localToken) {
-					player->minusNumOfToken(localToken - i);
+					if (mploader.regions[rnum].getOwnerId() != 100) {
+						int c = mploader.regions[rnum].getOwnerId();
+						ply[c - 1].ownedRegionSet.remove(c);
+						ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+						mploader.regions[rnum].resetContainToken(false);
+					}
+					if (mploader.regions[rnum].getIsLostTribes()) {
+						mploader.regions[rnum].minusContainToken(1);
+						mploader.regions[rnum].setIsLostTribes(false);
+					}
+					player->ownedRegionSet.push_back(rnum);
+					mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+					mploader.regions[rnum].addContainToken(player->getTokenNumber());
+					player->resetNumOfToken();
 					answer = true;
 				}
 				else {
+					cout << "You can't conquer the region " << rnum << endl;
 					break;
 				}
 			}
+
 			else {
+				if (mploader.regions[rnum].getOwnerId() != 100) {
+					int c = mploader.regions[rnum].getOwnerId();
+					ply[c - 1].ownedRegionSet.remove(c);
+					ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+					mploader.regions[rnum].resetContainToken(false);
+				}
+				if (mploader.regions[rnum].getIsLostTribes()) {
+					mploader.regions[rnum].minusContainToken(1);
+					mploader.regions[rnum].setIsLostTribes(false);
+				}
+
+				player->ownedRegionSet.push_back(rnum);
+				mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+				mploader.regions[rnum].addContainToken(localToken);
 				player->minusNumOfToken(localToken);
 			}
-			if (mploader.regions[rnum].getOwnerId() != 100) {
-				int c = mploader.regions[rnum].getOwnerId();
-				ply[c].ownedRegionSet.remove(c);
-				ply[c].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
-				mploader.regions[rnum].resetContainToken(false);
-			}
-			if (mploader.regions[rnum].getIsLostTribes()) {
-				mploader.regions[rnum].minusContainToken(1);
-				mploader.regions[rnum].setIsLostTribes(false);
-			}
-			player->ownedRegionSet.push_back(rnum);
-			mploader.regions[rnum].setOwnerID(player->getPlayerId());
 
-			mploader.regions[rnum].addContainToken(localToken);
+			cout << "You used " << localToken << " tokens to conquer this region" << ", and you have " << player->getTokenNumber() << " tokens left" << endl;
+
+			if (answer == 1) {
+				player->notifys(player);
+			}
 
 			if (answer == true)
 				break;
@@ -255,11 +355,12 @@ void Defensive::redeployment(MapLoader& mploader, Player* player, vector<Player>
 
 	//Take all tokens from the owned region, only leave one token
 	for (auto i : player->ownedRegionSet) {
-		player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
-		cout << "You got " << player->getTokenNumber() << endl;
+		player->addNumOfToken(mploader.regions[i].getUsefulContainToken() - 1);
 		mploader.regions[i].resetContainToken(false);
 	}
+	cout << "You got " << player->getTokenNumber() << " tokens on hand.\n";
 
+	//start redeployment
 	cout << "Player " << player->getPlayerId() << " owns the regions " << endl;
 	for (auto i : player->ownedRegionSet) {
 		cout << i << " ";
@@ -274,6 +375,7 @@ void Defensive::redeployment(MapLoader& mploader, Player* player, vector<Player>
 		if (mploader.checkBelongesTo(c, player->getPlayerId()) && (t <= player->getTokenNumber())) {
 			player->minusCoins(t);
 			mploader.regions[c].addContainToken(t);
+			cout << "Region " << c << " contains " << mploader.regions[c].getContainToken() << " tokens.\n";
 			cout << "Do u still want increase your defense? (y or n)";
 			cin >> a;
 			if (a != "y")
@@ -284,7 +386,7 @@ void Defensive::redeployment(MapLoader& mploader, Player* player, vector<Player>
 	}
 }
 
-void Defensive::score(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Defensive::score(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	for (auto r : player->race) {
 		for (auto s : player->ownedRegionSet) {
 			if (mploader.regions[s].getRegionType() == "Farmland"
@@ -340,9 +442,14 @@ void Defensive::score(MapLoader& mploader, Player* player, vector<Player>& ply) 
 	}
 
 	player->addCoins(player->ownedRegionSet.size());
-	cout << "You owns " << player->getCoins() << " coins.\n";
+	cout << "You owns " << player->getCoins() << " coins this turn.\n";
+
+	if (ans == 1) {
+		player->notifys(player);
+	}
 }
 
+//================================================================================
 //================================================================================
 
 void Moderate::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
@@ -373,10 +480,6 @@ void Moderate::execute(MapLoader& mploader, Player* player, vector<Player>& ply,
 					mploader.regions[i].resetContainToken(false);
 				}
 			}
-
-			conquers(mploader, player, ply);
-			redeployment(mploader, player, ply);
-			score(mploader, player, ply);
 		}
 	}
 	else {
@@ -396,11 +499,28 @@ void Moderate::execute(MapLoader& mploader, Player* player, vector<Player>& ply,
 				mploader.regions[i].resetContainToken(false);
 			}
 		}
-
-		conquers(mploader, player, ply);
-		redeployment(mploader, player, ply);
-		score(mploader, player, ply);
 	}
+}
+
+void Moderate::pickRace(Races &rs, PowerBudges &pb, Player* player) {
+	if (!player->race.empty() && !player->powerbudge.empty()) {
+		for (auto r : player->race) {
+			r.setActiveCondition(false);
+		}
+		for (auto p : player->powerbudge) {
+			p.setActiveCondition(false);
+		}
+	}
+
+	player->addRace(rs);
+	player->addPower(pb);
+	//cout << player[id-1].getRaceVector().at(0).getRaceId() << endl;
+
+	player->addNumOfToken(rs.getTokenNumber() + pb.getTokenNumber());
+
+	cout << "You pick the race " << rs.getRaceName()
+		<< " with special power " << pb.getPowerName()
+		<< " owns " << player->getTokenNumber() << " tokens on hand \n";
 }
 
 void Moderate::chooseDecline(MapLoader& mploader, Player* player, vector<Player>& ply) {
@@ -447,10 +567,11 @@ void Moderate::abandon(MapLoader& mploader, Player* player, vector<Player>& ply)
 	}
 }
 
-void Moderate::conquers(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Moderate::conquers(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	int rnum;
 	int localToken;  //minimum tokens needed to conquer the region
 	Dice dice;
+	int i = 0;
 	bool answer = false;
 
 	if (!player->ownedRegionSet.empty()) {
@@ -458,42 +579,67 @@ void Moderate::conquers(MapLoader& mploader, Player* player, vector<Player>& ply
 		for (auto i : player->ownedRegionSet) {
 			player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
 			mploader.regions[i].resetContainToken(false);
+			cout << "You owned " << player->getTokenNumber() << " tokens.\n";
 		}
 	}
 
-	while (player->getTokenNumber() > 1) {
-		cout << "Please choose a region you want to conquer\n";
+	while (player->getTokenNumber() > 0) {
+		cout << "Player " << player->getPlayerId() << ", please select a region to conquer( must be a region near a border or a region adjacent to the regions you own)" << endl;
 		cin >> rnum;
 		if (mploader.checkCanConquer(rnum, player->getPlayerId())) {
 			localToken = mploader.regions[rnum].getContainToken() + 2;
 
 			if (localToken > player->getTokenNumber()) {
-				int i = dice.rollingResult();
+				cout << "You don't have enough tokens. Please roll the dice.\n";
+				i = dice.rollingResult();
 				if ((i + player->getTokenNumber()) >= localToken) {
-					player->minusNumOfToken(localToken - i);
+					if (mploader.regions[rnum].getOwnerId() != 100) {
+						int c = mploader.regions[rnum].getOwnerId();
+						ply[c - 1].ownedRegionSet.remove(c);
+						ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+						mploader.regions[rnum].resetContainToken(false);
+					}
+					if (mploader.regions[rnum].getIsLostTribes()) {
+						mploader.regions[rnum].minusContainToken(1);
+						mploader.regions[rnum].setIsLostTribes(false);
+					}
+					player->ownedRegionSet.push_back(rnum);
+					mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+					mploader.regions[rnum].addContainToken(player->getTokenNumber());
+					player->resetNumOfToken();
 					answer = true;
 				}
 				else {
+					cout << "You can't conquer the region " << rnum << endl;
 					break;
 				}
 			}
+
 			else {
+				if (mploader.regions[rnum].getOwnerId() != 100) {
+					int c = mploader.regions[rnum].getOwnerId();
+					ply[c - 1].ownedRegionSet.remove(c);
+					ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+					mploader.regions[rnum].resetContainToken(false);
+				}
+				if (mploader.regions[rnum].getIsLostTribes()) {
+					mploader.regions[rnum].minusContainToken(1);
+					mploader.regions[rnum].setIsLostTribes(false);
+				}
+
+				player->ownedRegionSet.push_back(rnum);
+				mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+				mploader.regions[rnum].addContainToken(localToken);
 				player->minusNumOfToken(localToken);
 			}
-			if (mploader.regions[rnum].getOwnerId() != 100) {
-				int c = mploader.regions[rnum].getOwnerId();
-				ply[c].ownedRegionSet.remove(c);
-				ply[c].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
-				mploader.regions[rnum].resetContainToken(false);
-			}
-			if (mploader.regions[rnum].getIsLostTribes()) {
-				mploader.regions[rnum].minusContainToken(1);
-				mploader.regions[rnum].setIsLostTribes(false);
-			}
-			player->ownedRegionSet.push_back(rnum);
-			mploader.regions[rnum].setOwnerID(player->getPlayerId());
 
-			mploader.regions[rnum].addContainToken(localToken);
+			cout << "You used " << localToken << " tokens to conquer this region" << ", and you have " << player->getTokenNumber() << " tokens left" << endl;
+
+			if (answer == 1) {
+				player->notifys(player);
+			}
 
 			if (answer == true)
 				break;
@@ -510,11 +656,12 @@ void Moderate::redeployment(MapLoader& mploader, Player* player, vector<Player>&
 
 	//Take all tokens from the owned region, only leave one token
 	for (auto i : player->ownedRegionSet) {
-		player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
-		cout << "You got " << player->getTokenNumber() << endl;
+		player->addNumOfToken(mploader.regions[i].getUsefulContainToken() - 1);
 		mploader.regions[i].resetContainToken(false);
 	}
+	cout << "You got " << player->getTokenNumber() << " tokens on hand.\n";
 
+	//start redeployment
 	cout << "Player " << player->getPlayerId() << " owns the regions " << endl;
 	for (auto i : player->ownedRegionSet) {
 		cout << i << " ";
@@ -529,6 +676,7 @@ void Moderate::redeployment(MapLoader& mploader, Player* player, vector<Player>&
 		if (mploader.checkBelongesTo(c, player->getPlayerId()) && (t <= player->getTokenNumber())) {
 			player->minusCoins(t);
 			mploader.regions[c].addContainToken(t);
+			cout << "Region " << c << " contains " << mploader.regions[c].getContainToken() << " tokens.\n";
 			cout << "Do u still want increase your defense? (y or n)";
 			cin >> a;
 			if (a != "y")
@@ -539,7 +687,7 @@ void Moderate::redeployment(MapLoader& mploader, Player* player, vector<Player>&
 	}
 }
 
-void Moderate::score(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Moderate::score(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	for (auto r : player->race) {
 		for (auto s : player->ownedRegionSet) {
 			if (mploader.regions[s].getRegionType() == "Farmland"
@@ -595,9 +743,14 @@ void Moderate::score(MapLoader& mploader, Player* player, vector<Player>& ply) {
 	}
 
 	player->addCoins(player->ownedRegionSet.size());
-	cout << "You owns " << player->getCoins() << " coins.\n";
+	cout << "You owns " << player->getCoins() << " coins this turn.\n";
+
+	if (ans == 1) {
+		player->notifys(player);
+	}
 }
 
+//================================================================================
 //================================================================================
 
 void Random::execute(MapLoader& mploader, Player* player, vector<Player>& ply, int numOfTurn) {
@@ -619,9 +772,6 @@ void Random::execute(MapLoader& mploader, Player* player, vector<Player>& ply, i
 					abandon(mploader, player, ply);
 				}
 			}
-			conquers(mploader, player, ply);
-			redeployment(mploader, player, ply);
-			score(mploader, player, ply);
 		}
 	}
 	else {
@@ -632,10 +782,28 @@ void Random::execute(MapLoader& mploader, Player* player, vector<Player>& ply, i
 				abandon(mploader, player, ply);
 			}
 		}
-		conquers(mploader, player, ply);
-		redeployment(mploader, player, ply);
-		score(mploader, player, ply);
 	}
+}
+
+void Random::pickRace(Races &rs, PowerBudges &pb, Player* player) {
+	if (!player->race.empty() && !player->powerbudge.empty()) {
+		for (auto r : player->race) {
+			r.setActiveCondition(false);
+		}
+		for (auto p : player->powerbudge) {
+			p.setActiveCondition(false);
+		}
+	}
+
+	player->addRace(rs);
+	player->addPower(pb);
+	//cout << player[id-1].getRaceVector().at(0).getRaceId() << endl;
+
+	player->addNumOfToken(rs.getTokenNumber() + pb.getTokenNumber());
+
+	cout << "You pick the race " << rs.getRaceName()
+		<< " with special power " << pb.getPowerName()
+		<< " owns " << player->getTokenNumber() << " tokens on hand \n";
 }
 
 void Random::chooseDecline(MapLoader& mploader, Player* player, vector<Player>& ply) {
@@ -682,10 +850,11 @@ void Random::abandon(MapLoader& mploader, Player* player, vector<Player>& ply) {
 	}
 }
 
-void Random::conquers(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Random::conquers(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	int rnum;
 	int localToken;  //minimum tokens needed to conquer the region
 	Dice dice;
+	int i = 0;
 	bool answer = false;
 
 	if (!player->ownedRegionSet.empty()) {
@@ -693,44 +862,67 @@ void Random::conquers(MapLoader& mploader, Player* player, vector<Player>& ply) 
 		for (auto i : player->ownedRegionSet) {
 			player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
 			mploader.regions[i].resetContainToken(false);
+			cout << "You owned " << player->getTokenNumber() << " tokens.\n";
 		}
 	}
 
-	while (player->getTokenNumber() > 1) {
-		cout << "Please choose a region you want to conquer\n";
+	while (player->getTokenNumber() > 0) {
+		cout << "Player " << player->getPlayerId() << ", please select a region to conquer( must be a region near a border or a region adjacent to the regions you own)" << endl;
 		cin >> rnum;
 		if (mploader.checkCanConquer(rnum, player->getPlayerId())) {
 			localToken = mploader.regions[rnum].getContainToken() + 2;
 
 			if (localToken > player->getTokenNumber()) {
-				int i = dice.rollingResult();
+				cout << "You don't have enough tokens. Please roll the dice.\n";
+				i = dice.rollingResult();
 				if ((i + player->getTokenNumber()) >= localToken) {
-					player->minusNumOfToken(localToken - i);
+					if (mploader.regions[rnum].getOwnerId() != 100) {
+						int c = mploader.regions[rnum].getOwnerId();
+						ply[c - 1].ownedRegionSet.remove(c);
+						ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+						mploader.regions[rnum].resetContainToken(false);
+					}
+					if (mploader.regions[rnum].getIsLostTribes()) {
+						mploader.regions[rnum].minusContainToken(1);
+						mploader.regions[rnum].setIsLostTribes(false);
+					}
+					player->ownedRegionSet.push_back(rnum);
+					mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+					mploader.regions[rnum].addContainToken(player->getTokenNumber());
+					player->resetNumOfToken();
 					answer = true;
 				}
 				else {
-					cout << "Your tokens number is lower than required, you don't own this regions.\n";
+					cout << "You can't conquer the region " << rnum << endl;
 					break;
 				}
 			}
+
 			else {
+				if (mploader.regions[rnum].getOwnerId() != 100) {
+					int c = mploader.regions[rnum].getOwnerId();
+					ply[c - 1].ownedRegionSet.remove(c);
+					ply[c - 1].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
+					mploader.regions[rnum].resetContainToken(false);
+				}
+				if (mploader.regions[rnum].getIsLostTribes()) {
+					mploader.regions[rnum].minusContainToken(1);
+					mploader.regions[rnum].setIsLostTribes(false);
+				}
+
+				player->ownedRegionSet.push_back(rnum);
+				mploader.regions[rnum].setOwnerID(player->getPlayerId());
+
+				mploader.regions[rnum].addContainToken(localToken);
 				player->minusNumOfToken(localToken);
 			}
-			if (mploader.regions[rnum].getOwnerId() != 100) {
-				int c = mploader.regions[rnum].getOwnerId();
-				ply[c].ownedRegionSet.remove(c);
-				ply[c].addNumOfToken(mploader.regions[rnum].getContainToken() - 1);
-				mploader.regions[rnum].resetContainToken(false);
-			}
-			if (mploader.regions[rnum].getIsLostTribes()) {
-				mploader.regions[rnum].minusContainToken(1);
-				mploader.regions[rnum].setIsLostTribes(false);
-			}
-			player->ownedRegionSet.push_back(rnum);
-			mploader.regions[rnum].setOwnerID(player->getPlayerId());
 
-			mploader.regions[rnum].addContainToken(localToken);
 			cout << "You used " << localToken << " tokens to conquer this region" << ", and you have " << player->getTokenNumber() << " tokens left" << endl;
+
+			if (answer == 1) {
+				player->notifys(player);
+			}
 
 			if (answer == true)
 				break;
@@ -747,11 +939,12 @@ void Random::redeployment(MapLoader& mploader, Player* player, vector<Player>& p
 
 	//Take all tokens from the owned region, only leave one token
 	for (auto i : player->ownedRegionSet) {
-		player->addNumOfToken(mploader.regions[i].getUsefulContainToken());
-		cout << "You got " << player->getTokenNumber() << endl;
+		player->addNumOfToken(mploader.regions[i].getUsefulContainToken() - 1);
 		mploader.regions[i].resetContainToken(false);
 	}
+	cout << "You got " << player->getTokenNumber() << " tokens on hand.\n";
 
+	//start redeployment
 	cout << "Player " << player->getPlayerId() << " owns the regions " << endl;
 	for (auto i : player->ownedRegionSet) {
 		cout << i << " ";
@@ -766,6 +959,7 @@ void Random::redeployment(MapLoader& mploader, Player* player, vector<Player>& p
 		if (mploader.checkBelongesTo(c, player->getPlayerId()) && (t <= player->getTokenNumber())) {
 			player->minusCoins(t);
 			mploader.regions[c].addContainToken(t);
+			cout << "Region " << c << " contains " << mploader.regions[c].getContainToken() << " tokens.\n";
 			cout << "Do u still want increase your defense? (y or n)";
 			cin >> a;
 			if (a != "y")
@@ -776,7 +970,7 @@ void Random::redeployment(MapLoader& mploader, Player* player, vector<Player>& p
 	}
 }
 
-void Random::score(MapLoader& mploader, Player* player, vector<Player>& ply) {
+void Random::score(MapLoader& mploader, Player* player, vector<Player>& ply, int ans) {
 	for (auto r : player->race) {
 		for (auto s : player->ownedRegionSet) {
 			if (mploader.regions[s].getRegionType() == "Farmland"
@@ -832,5 +1026,9 @@ void Random::score(MapLoader& mploader, Player* player, vector<Player>& ply) {
 	}
 
 	player->addCoins(player->ownedRegionSet.size());
-	cout << "You owns " << player->getCoins() << " coins.\n";
+	cout << "You owns " << player->getCoins() << " coins this turn.\n";
+
+	if (ans == 1) {
+		player->notifys(player);
+	}
 }

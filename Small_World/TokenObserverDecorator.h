@@ -12,4 +12,3 @@ class TokenObserverDecorator :public ObserverDecorator {
 	virtual void Update(Player* p);
 	
 };
-//:ObserverDecorator(decoratedObserver) {}

@@ -28,30 +28,46 @@ GameDrive::~GameDrive() {
 void GameDrive::start() {
 
 	//Insert the number of players of this game
-	cout << "How many people play this game? (1 to 5)" << endl;
 	while (true) {
-		cin >> numOfPlayer;
-		if (numOfPlayer <= 5 && numOfPlayer >= 1)
-			break;
-		cout << "Please enter a number between 2 and 5.\n" 
-			<< "How many people play this game? (2 to 5)\n";
+		try {
+			cout << "How many people play this game? (2 to 5) \n";
+			cin >> numOfPlayer;
+			if (numOfPlayer > 5 || numOfPlayer < 2)
+				throw numOfPlayer;
+			else
+				break;
+		}
+		catch (int x) {
+			cout << "Please enter a number between 2 and 5.\n";
+		}
 	}
 	
-	while (true) {
-		cout << "Which map you want to choose?(2 to 5)\n";
-		cin >> numOfmap;
-		if (numOfmap <= 5 && numOfmap >= 2 && numOfmap >= numOfPlayer)
-			break;
-		cout << "Please enter a number between 2 and 5.\n";
-	}
+	//Insert the Map number for this game
+	/*while (true) {
+		try {
+			cout << "Which map you want to choose?(2 to 5)\n";
+			cin >> numOfmap;
+			if (numOfmap > 5 || numOfmap < 2 || numOfmap < numOfPlayer)
+				throw 0;
+			else
+				break;
+		}
+		catch (int x) {
+			cout << "Please enter a number between 2 and 5.\n";
+		}
+	}*/
 
 	/*
 	** 	Load the selected map based on number of players
 	** 	All information about the maps has been printed
 	**	If the selected map is not a graph, system stop
 	*/
-	chooseMapType(this->numOfmap);
-	while (!testMap.checkIfIsMap()) {
+	chooseMapType(this->numOfPlayer);
+	try {
+		if (!testMap.checkIfIsMap())
+			throw false;
+	}
+	catch(bool x){
 		exit(0);
 	}
 
@@ -65,19 +81,20 @@ void GameDrive::start() {
 		ply = Player(i + 1);
 		players.push_back(ply);
 	}
-	if (numOfmap > numOfPlayer) {
+	/*if (numOfmap > numOfPlayer) {
 		for (int j = numOfPlayer; j < numOfmap; ++j) {
 			plyAI = AI(j + 1);
 			players.push_back(plyAI);
 		}
-	}
+	}*/
 
 	//====================================================================================
 	//The game start!
 	int answer =1;
 	string ans, anss;
 
-	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
+	//for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
+	for (numOfTurn = 1; numOfTurn < 5; numOfTurn++) {
 		cout << "Now is Turn #" << numOfTurn << endl;
 		//Add decorator
 		if (answer == 1) {
@@ -91,66 +108,122 @@ void GameDrive::start() {
 
 		for (auto j : players) {
 			//start loop for every players
-			if (!j.getIsComputer()) {
-				Player *p = &j;
-				po = new PhaseObserver();
-				so = new StatisticsObserver();
-				j.Attach(po);
-				j.Attach(so);
-				if (tokenOanwser == 1)
-					j.Attach(tokenObserverDecorator);
-				if (victoryCoinOAnwser == 1)
-					j.Attach(victoryCoinObserver);
-				j.setPlayerTurn(numOfTurn);
-				string ans, anss;
-				j.setStep("pick");
-				cout << "Player #" << j.getPlayerId() << endl;
+			//if (!j.getIsComputer()) {
+			if (j.getStrategyName() == "Aggressive") {
+				strat = new Aggressive();
+			}
+			else if (j.getStrategyName() == "Defensive") {
+				strat = new Defensive();
+			}
+			else if (j.getStrategyName() == "Moderate") {
+				strat = new Moderate();
+			}
+			else if (j.getStrategyName() == "Random") {
+				strat = new Random();
+			}
 
-				if (numOfTurn == 1 || j.getNumberOfDecline() == 0) {
+			Player *plys = &j;
+			po = new PhaseObserver();
+			so = new StatisticsObserver();
+			j.Attach(po);
+			j.Attach(so);
+			if (tokenOanwser == 1)
+				j.Attach(tokenObserverDecorator);
+			if (victoryCoinOAnwser == 1)
+				j.Attach(victoryCoinObserver);
+			j.setPlayerTurn(numOfTurn);
+			string ans, anss;
+
+			cout << "Player #" << j.getPlayerId() << endl;
+			
+			//	ii) for the first turn
+			if (numOfTurn == 1) {
+				j.setStep("pick");			//Observer
+				j.Notify(plys);				//Observer
+				
+				charaCombo();
+				cin >> numOfCombo;
+				string sl = shufflePickRace(rv[numOfCombo - 1]);
+				string s2 = shufflePickPower(pv[numOfCombo - 1]);
+
+				strat->pickRace(r, pb, plys);
+				rv.erase(rv.begin() + numOfCombo - 1);
+				pv.erase(pv.begin() + numOfCombo - 1);
+				j.minusCoins(numOfCombo - 1);
+
+				strat->execute(testMap, plys, players, numOfTurn);
+
+				j.setStep("conquer");		//Observer
+				j.Notify(plys);				//Observer
+				strat->conquers(testMap, plys, players, tokenOanwser);
+				j.setStep("reDeploy");		//Observer
+				j.Notify(plys);				//Observer
+				strat->redeployment(testMap, plys, players);
+				j.setStep("score");			//Observer
+				j.Notify(plys);				//Observer
+				strat->score(testMap, plys, players, victoryCoinOAnwser);
+				j.Detach(po);				//Observer
+				j.Detach(so);				//Observer
+			}
+			//	iii) for the rest turns
+			else {
+				if(j.getNumberOfDecline() == 1){
 					charaCombo();
-					j.Notify(p);
-					//	cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
 					cin >> numOfCombo;
-
 					string sl = shufflePickRace(rv[numOfCombo - 1]);
 					string s2 = shufflePickPower(pv[numOfCombo - 1]);
 
-					j.pick_race(r, pb, players);
+					j.setStep("pick");		//Observer
+					j.Notify(plys);				//Observer
+					strat->pickRace(r, pb, plys);
 					rv.erase(rv.begin() + numOfCombo - 1);
 					pv.erase(pv.begin() + numOfCombo - 1);
-
 					j.minusCoins(numOfCombo - 1);
-					j.setStep("conquer");
-					j.Notify(p);
-					j.conquers(testMap, numOfTurn, players, tokenOanwser);
-					j.setStep("reDeploy");
-					j.Notify(p);
-					j.redployment(testMap, players);
-					j.setStep("score");
-					j.Notify(p);
-					j.score(testMap, players, victoryCoinOAnwser);
-					j.Detach(po);
-					j.Detach(so);
+
+					strat->execute(testMap, plys, players, numOfTurn);
+
+					j.setStep("conquer");		//Observer
+					j.Notify(plys);				//Observer
+					strat->conquers(testMap, plys, players, tokenOanwser);
+					j.setStep("reDeploy");		//Observer
+					j.Notify(plys);				//Observer
+					strat->redeployment(testMap, plys, players);
+					j.setStep("score");			//Observer
+					j.Notify(plys);				//Observer
+					strat->score(testMap, plys, players, victoryCoinOAnwser);
+					j.Detach(po);				//Observer
+					j.Detach(so);				//Observer
 				}
 				else {
 					cout << "Do u want to decline your current combo? (y or n)\n";
 					cin >> anss;
-					if (anss == "y") {
-						if (!j.chooseDecline(testMap, numOfTurn, players)) {
-							j.conquers(testMap, numOfTurn, players, tokenOanwser);
-							j.redployment(testMap, players);
-						}
+					if (anss == "y" && j.getNumberOfDecline() == 0 
+						&& (j.getStrategyName() == "Moderate" || j.getStrategyName() == "Random")) {
+						strat->chooseDecline(testMap, plys, players);
 					}
 					else {
-						j.conquers(testMap, numOfTurn, players, tokenOanwser);
-						j.redployment(testMap, players);
+						strat->execute(testMap, plys, players, numOfTurn);
+						j.setStep("conquer");		//Observer
+						j.Notify(plys);				//Observer
+						strat->conquers(testMap, plys, players, tokenOanwser);
+						j.setStep("reDeploy");		//Observer
+						j.Notify(plys);				//Observer
+						strat->redeployment(testMap, plys, players);
 					}
-					j.score(testMap, players, victoryCoinOAnwser);
+
+					j.setStep("score");			//Observer
+					j.Notify(plys);				//Observer
+					strat->score(testMap, plys, players, victoryCoinOAnwser);
+					j.Detach(po);				//Observer
+					j.Detach(so);				//Observer
 				}
 			}
+			delete plys;
+			//delete strat;
+			//}
 
 			//AI loop start
-			else {
+			/*else {
 				if (j.race.empty() || !j.race[0].getActiveCondition()) {
 					charaCombo();
 					cout << "Please pick a Race and Special Power combo (1 to 6)" << endl;
@@ -185,18 +258,31 @@ void GameDrive::start() {
 					strat->execute(testMap, ai, players, numOfTurn);
 				}
 
-			}
+			}*/
 			//AI loop end
 		}
 		if (answer == 1) {
 			//delete observers after each turn 
 			deleteObservers();
 		}
+		
 	}
+
+	//	iv) reveal the winner at the end
+	int a = 0;
+	int c;
+	for (auto p : players) {
+		if (p.getCoins() > a) {
+			a = p.getCoins();
+			c = p.getPlayerId();
+		}
+	}
+	cout << "The winner of this game is Player #" << c << endl;
+
 	cout << "Thank you for enjoy this game.\n";
 }
 
-//	Choose a map depends on number of player
+//Choose a map depends on number of player
 void GameDrive::chooseMapType(int numOfPlayer) {
 	
 	switch (numOfPlayer)
@@ -219,41 +305,6 @@ void GameDrive::chooseMapType(int numOfPlayer) {
 	default:
 		this->testMap.mapReader("testing.map");
 		break;
-	}
-}
-void GameDrive::addVictoryCoinObserver(int victoryCoinOAnwser, vector<Player> players) {
-	victoryCoinObserver = new VictoryCoinObserverDecorator( PhaseObserver());
-	for (auto p : players) {
-		p.Attach(victoryCoinObserver);
-	}
-}
-void GameDrive::addTokenObserverDecorator(int tokenOanwser, vector<Player> players) {
-	tokenObserverDecorator =  new TokenObserverDecorator(PhaseObserver());
-	for (auto p : players) {
-		p.Attach(tokenObserverDecorator);
-	}
-}
-void GameDrive::deleteObservers( ) {
-	 
-	for (auto p : players) {
-		p.Detach(tokenObserverDecorator);
-		p.Detach(victoryCoinObserver);
-	}
-	tokenOanwser = 0;
-	victoryCoinOAnwser = 0;
-}
-void GameDrive::addObserver(vector<Player> players) {
-	cout << "Do you want to add tokenObserver (o for no and 1 for yes)?" << endl;
-	//int tokenOanwser;
-	cin >> tokenOanwser;
-	if (tokenOanwser == 1) {
-		addTokenObserverDecorator(tokenOanwser, players);
-	}
-	cout << "Do you want to add victoryCoinObserver (o for no and 1 for yes)?" << endl;
-	//int victoryCoinOAnwser;
-	cin >> victoryCoinOAnwser;
-	if (victoryCoinOAnwser == 1) {
-		addVictoryCoinObserver(tokenOanwser, players);
 	}
 }
 
@@ -454,3 +505,41 @@ void GameDrive::setPowerType(PowerBudges pbs) {
 	this->pb = pbs;
 }
 
+void GameDrive::addVictoryCoinObserver(int victoryCoinOAnwser, vector<Player> players) {
+	victoryCoinObserver = new VictoryCoinObserverDecorator(PhaseObserver());
+	for (auto p : players) {
+		p.Attach(victoryCoinObserver);
+	}
+}
+
+void GameDrive::addTokenObserverDecorator(int tokenOanwser, vector<Player> players) {
+	tokenObserverDecorator = new TokenObserverDecorator(PhaseObserver());
+	for (auto p : players) {
+		p.Attach(tokenObserverDecorator);
+	}
+}
+
+void GameDrive::deleteObservers() {
+
+	for (auto p : players) {
+		p.Detach(tokenObserverDecorator);
+		p.Detach(victoryCoinObserver);
+	}
+	tokenOanwser = 0;
+	victoryCoinOAnwser = 0;
+}
+
+void GameDrive::addObserver(vector<Player> players) {
+	cout << "Do you want to add tokenObserver (o for no and 1 for yes)?" << endl;
+	//int tokenOanwser;
+	cin >> tokenOanwser;
+	if (tokenOanwser == 1) {
+		addTokenObserverDecorator(tokenOanwser, players);
+	}
+	cout << "Do you want to add victoryCoinObserver (o for no and 1 for yes)?" << endl;
+	//int victoryCoinOAnwser;
+	cin >> victoryCoinOAnwser;
+	if (victoryCoinOAnwser == 1) {
+		addVictoryCoinObserver(tokenOanwser, players);
+	}
+}

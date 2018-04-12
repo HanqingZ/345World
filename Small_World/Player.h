@@ -30,22 +30,21 @@ protected:
 	int diceResult;
 	Races races;
 	PowerBudges powerbudges;
-	//Strategy* strat = nullptr;
 	int playerTurn;
 	string step;
 	int regionTotalNum;
 	list<int>::iterator i;
 	int playerRegionSize=0;
 
+	//Strategy* strat;
+
 public:
 	Player();
 	Player(int);
 	~Player();
 
-//	virtual void setStrategy(MapLoader&, int, vector<Player>&);
-
 	void pick_race(Races&, PowerBudges&, vector<Player>&);
-	void conquers(MapLoader& m, int a , vector<Player>& p, int answer);
+	void conquers(MapLoader& m, int a , vector<Player>& p, int);
 	void redployment(MapLoader&, vector<Player>&);
 	void score(MapLoader&, vector<Player>&,int);
 	bool chooseDecline(MapLoader&, int, vector<Player>&);
@@ -61,8 +60,8 @@ public:
 	void setStep(string s) { this->step = s; }
 	void setPlayerTurn(int turn) { this->playerTurn = turn; }
 	void setNumberOfDecline(int d) { this->numOfDecline = d; }
-	//void addRace(Races);
-	//void addPower(PowerBudges);
+	void addRace(Races rs) { this->race.push_back(rs); }
+	void addPower(PowerBudges pb) { this->powerbudge.push_back(pb); }
 	void addJoinRegion(int rg, vector<Player>& players , int playerID);
 	int getCoins();
 	int getTokenNumber();
@@ -79,11 +78,11 @@ public:
 	void shown();
 	int getPlayerRegionSize();
 	void setPlayerRegionSize(int playerRegionSize);
+	void notifys(Player*);
+
 	list<int> ownedRegionSet;
-	//vector<Region*> ownedRegion;
 	vector<Races> race;
 	vector<PowerBudges> powerbudge;
-	//list<int> GetList();
 
 };
 
