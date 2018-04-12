@@ -93,12 +93,13 @@ void GameDrive::start() {
 	int answer =1;
 	string ans, anss;
 
-	//for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
-	for (numOfTurn = 1; numOfTurn < 5; numOfTurn++) {
+	for (numOfTurn = 1; numOfTurn < 11; numOfTurn++) {
+	//for (numOfTurn = 1; numOfTurn < 5; numOfTurn++) {
+		cout << endl;
 		cout << "Now is Turn #" << numOfTurn << endl;
 		//Add decorator
 		if (answer == 1) {
-			cout << "Do you want to add decorator Observer (0 for no and 1 for yes)?" << endl;
+			cout << "Do you want to Observer more information (0 for no and 1 for yes)?" << endl;
 			cin >> answer;
 			if (answer == 1) {
 				addObserver(players);
@@ -217,9 +218,7 @@ void GameDrive::start() {
 					j.Detach(po);				//Observer
 					j.Detach(so);				//Observer
 				}
-			}
-			delete plys;
-			//delete strat;
+			}			
 			//}
 
 			//AI loop start
@@ -261,11 +260,12 @@ void GameDrive::start() {
 			}*/
 			//AI loop end
 		}
+
 		if (answer == 1) {
 			//delete observers after each turn 
 			deleteObservers();
 		}
-		
+
 	}
 
 	//	iv) reveal the winner at the end
@@ -530,13 +530,13 @@ void GameDrive::deleteObservers() {
 }
 
 void GameDrive::addObserver(vector<Player> players) {
-	cout << "Do you want to add tokenObserver (o for no and 1 for yes)?" << endl;
+	cout << "Do you want to observe your token status (o for no and 1 for yes)?" << endl;
 	//int tokenOanwser;
 	cin >> tokenOanwser;
 	if (tokenOanwser == 1) {
 		addTokenObserverDecorator(tokenOanwser, players);
 	}
-	cout << "Do you want to add victoryCoinObserver (o for no and 1 for yes)?" << endl;
+	cout << "Do you want to observe your coins status (o for no and 1 for yes)?" << endl;
 	//int victoryCoinOAnwser;
 	cin >> victoryCoinOAnwser;
 	if (victoryCoinOAnwser == 1) {

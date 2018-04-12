@@ -34,7 +34,7 @@ void Subject::Detach(Observer* o)
 		}
 	}
 
-	cout << o->observerType << "Unsubscribed" << endl;
+	//cout << o->observerType << "Unsubscribed" << endl;
 }
 
 void Subject::Notify()

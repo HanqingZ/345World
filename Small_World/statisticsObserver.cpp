@@ -34,7 +34,7 @@ void StatisticsObserver::UpdateP(int numRegion, vector<Player> &players) {
 		//own = (double)(pr->getPlayerRegionSize());
 	//	own = (p.getPlayerRegionSize());
 		own = p.getPlayerRegionSize();
-	cout << pr->getPlayerRegionSize() << endl;
+	//	cout << pr->getPlayerRegionSize() << endl;
 		percent = (own / (double)numRegion) * 100;
 	//	own = (double)(pr->getPlayerRegionSize());
 	//	cout << numRegion << endl;
